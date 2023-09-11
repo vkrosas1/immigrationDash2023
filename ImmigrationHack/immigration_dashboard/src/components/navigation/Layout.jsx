@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import HomeController from '../home/HomeController';
 import DocumentsController from '../documents/DocumentsController';
 import FilesController from '../files/FilesController';
@@ -12,7 +12,7 @@ function Layout(props) {
             <div className="App">
                 <div className="container">
                     <Header class="block" {...props} />
-                    <Switch class="block">
+                    <Routes class="block">
                         <Route exact path="/home" render={() => (
                             <HomeController {...props} />
                         )} />
@@ -25,8 +25,8 @@ function Layout(props) {
                         <Route exact path="/settings" render={() => (
                             <SettingsController {...props} />
                         )} />
-                        <Redirect to="/home" />
-                    </Switch>
+                        <Route to="/home" />
+                    </Routes>
                 </div>
             </div>
         </Router>

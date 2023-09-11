@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 import Layout from './components/navigation/Layout';
-import { TEMP_USER } from './Constants';
+import { TEMP_USER } from './Contstants';
 import FileService from './api/FileService';
 import PathService from './api/PathService';
 
