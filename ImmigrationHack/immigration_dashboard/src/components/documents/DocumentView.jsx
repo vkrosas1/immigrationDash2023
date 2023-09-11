@@ -1,5 +1,4 @@
-import { STATUSES } from "../../Constants"
-
+import { STATUSES } from "../../Contstants";
 function DocumentsList(props) {
 
     const generateOnClick = function (documentForm) {

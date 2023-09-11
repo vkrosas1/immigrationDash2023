@@ -1,6 +1,6 @@
 import { useState } from "react";
 import FileService from "../../api/FileService";
-import { STATUSES, TEMP_USER } from "../../Constants";
+import { STATUSES, TEMP_USER } from "../../Contstants";
 
 function DocumentView(props) {
 

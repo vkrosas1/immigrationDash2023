@@ -4,7 +4,7 @@ import DocumentView from './DocumentView';
 import FileService from '../../api/FileService';
 import DocumentsList from './DocumentsList';
 import { sortStatuses } from '../../Utilities';
-import { TEMP_USER } from '../../Constants';
+import { TEMP_USER } from "../../Contstants";
 
 function DocumentsController(props) {
 
