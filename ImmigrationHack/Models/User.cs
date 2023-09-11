@@ -1,9 +1,4 @@
-﻿using ImmigrationHack.Models;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Newtonsoft.Json;
 
 namespace Immigration_Dashboard_Server.Models
 {
