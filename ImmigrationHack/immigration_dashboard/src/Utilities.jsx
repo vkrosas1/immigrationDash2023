@@ -1,4 +1,4 @@
-import { STATUSES } from "./Constants"
+import { STATUSES } from "./Contstants"
 export const sortStatuses = (x, y) => {
     const xOrder = x.status ? STATUSES[x.status].order : Object.keys(STATUSES).length
     const yOrder = y.status ? STATUSES[y.status].order : Object.keys(STATUSES).length
