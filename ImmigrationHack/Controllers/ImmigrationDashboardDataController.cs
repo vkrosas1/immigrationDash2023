@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection.Metadata;
-using System.Threading.Tasks;
+using Document = Immigration_Dashboard_Server.Models.Document;
 using Path = Immigration_Dashboard_Server.Models.Path;
 
 namespace Immigration_Dashboard_Server.Controllers
@@ -17,7 +17,7 @@ namespace Immigration_Dashboard_Server.Controllers
     {
         private readonly ICosmosDbService<User> userCosmosDbService;
         private readonly ICosmosDbService<Form> formCosmosDbService;
-        private readonly ICosmosDbService<Document> documentCosmosDbService;
+        private readonly ICosmosDbService<Models.Document> documentCosmosDbService;
         private readonly ICosmosDbService<Path> pathCosmosDbService;
         private readonly IAzureBlobStorageService azureBlobStorageService;
 
