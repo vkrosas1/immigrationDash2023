@@ -437,23 +437,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\deepakverma\\.nuget\\packages": {},
+    "C:\\Users\\vivianarosas\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\deepakverma\\source\\repos\\immigrationDash2023\\ImmigrationHack\\ImmigrationHack.csproj",
+      "projectUniqueName": "C:\\Users\\vivianarosas\\immigrationDash2023\\ImmigrationHack\\ImmigrationHack.csproj",
       "projectName": "ImmigrationHack",
-      "projectPath": "C:\\Users\\deepakverma\\source\\repos\\immigrationDash2023\\ImmigrationHack\\ImmigrationHack.csproj",
-      "packagesPath": "C:\\Users\\deepakverma\\.nuget\\packages",
-      "outputPath": "C:\\Users\\deepakverma\\source\\repos\\immigrationDash2023\\ImmigrationHack\\obj\\",
+      "projectPath": "C:\\Users\\vivianarosas\\immigrationDash2023\\ImmigrationHack\\ImmigrationHack.csproj",
+      "packagesPath": "C:\\Users\\vivianarosas\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\vivianarosas\\immigrationDash2023\\ImmigrationHack\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\deepakverma\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\vivianarosas\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -462,8 +462,7 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "https://msasg.pkgs.visualstudio.com/_packaging/Bing/nuget/v3/index.json": {},
-        "https://msasg.pkgs.visualstudio.com/_packaging/xap_services/nuget/v3/index.json": {}
+        "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net6.0": {
