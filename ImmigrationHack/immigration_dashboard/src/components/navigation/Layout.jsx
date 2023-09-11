@@ -13,18 +13,10 @@ function Layout(props) {
                 <div className="container">
                     <Header class="block" {...props} />
                     <Routes class="block">
-                        <Route exact path="/home" render={() => (
-                            <HomeController {...props} />
-                        )} />
-                        <Route exact path="/documents" render={() => (
-                            <DocumentsController {...props} />
-                        )} />
-                        <Route exact path="/files" render={() => (
-                            <FilesController {...props} />
-                        )} />
-                        <Route exact path="/settings" render={() => (
-                            <SettingsController {...props} />
-                        )} />
+                        <Route exact path="/home" element=<HomeController {...props} />></Route>
+                        <Route exact path="/documents" element=<DocumentsController {...props} />></Route>
+                        <Route exact path="/files" element=<FilesController {...props} />></Route>
+                        <Route exact path="/settings" element=<SettingsController {...props} />></Route>
                         <Route to="/home" />
                     </Routes>
                 </div>
