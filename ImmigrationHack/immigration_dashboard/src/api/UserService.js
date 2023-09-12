@@ -6,7 +6,7 @@ const authenticateUser = async function (email, password) {
 
 const getUserID = async function (email) {
     const userID = Service.get(`getUserID`, { email }, {});
-    UserInformation.append('userID', userID);
+    UserInformation['userID'] = userID;
     return await userID;
 }
 
@@ -14,9 +14,12 @@ const getUserInfo = async function (userID) {
     return await Service.get(`GetUserAndPass`, { userID }, {});
 }
 
-const createUser = async function (email, password) {
-    UserInformation.append('email', email);
-    UserInformation.append('password', password);
+const createUser = async function (email, password, first_name, last_name, country) {
+    UserInformation['email'] = email;
+    UserInformation['password'] = password;
+    UserInformation['first_name'] = first_name;
+    UserInformation['last_name'] = last_name;
+    UserInformation['country'] = country;
     return await Service.postFormData(`CreateUserAccount`, UserInformation, {});
 }
 
@@ -37,9 +40,10 @@ const createDocument = async function (formId, status) {
 }
 
 const uploadDocument = async function (formId, status, filename) {
-    UserInformation.append('formId', formId);
-    UserInformation.append('status', status);
-    UserInformation.append('filename', filename);
+    UserInformation['formId'] = formId;
+    UserInformation['status'] = status;
+    UserInformation['filename'] = filename;
+
     return await Service.postFormData(`UploadUserDocument`, UserInformation, {});
 }
 
