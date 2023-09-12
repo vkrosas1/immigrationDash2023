@@ -1,7 +1,7 @@
 /*import TreeView from "./TreeView";
 */
 import UserService from "../../api/UserService";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 function HomeController(props) {
     // React States
@@ -18,15 +18,15 @@ function HomeController(props) {
         //Prevent page reload
         event.preventDefault();
 
-        var { uname, pass, repass } = document.forms[0];
+        var { uname, pass, repass, fname, lname, country } = document.forms[0];
 
         if (isLogIn) {
             // Find user login info
-            const userData = await UserSerivce.authenticateUser(uname, pass);
+            const userData = UserService.authenticateUser(uname, pass);
 
             // Compare user info
             if (userData) {
-                await UserService.getUserInfo(uname);
+                UserService.getUserInfo(uname);
             }
             else {
                 // Username or password incorrect
@@ -38,7 +38,7 @@ function HomeController(props) {
                 setErrorMessages({ name: "repass", message: errors.repass });
             }
             else {
-                await UserService.createUser(uname);
+                UserService.createUser(uname, pass, fname, lname, country);
             }
         }
     };
@@ -52,20 +52,24 @@ function HomeController(props) {
 
     const renderForm =  (
         <div className="container-login">
-            <div style={{ transform: `translate(${isLogIn ? 0 : 250}px, 0px)` }} className="form-div">
+            <div style={{ transform: `translate(${isLogIn ? 0 : 300}px, 0px)` }} className="form-div">
                 <form onSubmit={handleSubmit}>
-                    <div> <input placeholder="Username" type="text" name="uname" required />
+                    <div> <input placeholder="Email Address" type="text" name="uname" required />
                         {renderErrorMessage("uname")}
                     </div>
                     <div> <input placeholder="Password" type="password" name="pass" required />
                         {renderErrorMessage("pass")}
                     </div>
-                    <div> {isLogIn ? '' : <input placeholder="Re-enter password" type="password" name="repass" required />}
+                    <div> {isLogIn ? '' :
+                        <div><input placeholder="Re-enter password" type="password" name="repass" required />
+                            <input placeholder="First Name" type="text" name="fname" required />
+                            <input placeholder="Last Name" type="text" name="lname" required />
+                            <input placeholder="Country of Citizenship" type="text" name="country" required />   </div>  }
                         {renderErrorMessage("repass")}</div>
                         <button className="button-primary">Submit</button>
                 </form>
             </div>
-            <div style={{ transform: `translate(${isLogIn ? 0 : -250}px, 0px)` }} className="button-div">
+            <div style={{ transform: `translate(${isLogIn ? 0 : -300}px, 0px)` }} className="button-div">
                 <p>{isLogIn ? 'Do not have an account?' : 'Already a member?'}</p>
                 <button onClick={() => { setIsLogIn(!isLogIn) }}>{isLogIn ? "Register" : "Log In"}</button>
             </div>
