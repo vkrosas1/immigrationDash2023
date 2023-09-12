@@ -19,11 +19,11 @@ namespace ImmigrationHack.Services.src.Data.Entities
 
         [ForeignKey("DocumentType")] 
         public Guid DocumentTypeId { get; set; }
-        public virtual DocumentType DocumentType { get; set; }
+        public DocumentType DocumentType { get; set; }
 
         [ForeignKey("User")]
         public Guid UserId { get; set; }
-        public virtual User User { get; set; }
+        public User User { get; set; }
 
     }
 }
