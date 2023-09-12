@@ -4,6 +4,7 @@ using ImmigrationHack.Services.src.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ImmigrationHack.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230912182720_InitialCreate_6")]
+    partial class InitialCreate_6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -88,18 +91,29 @@ namespace ImmigrationHack.Migrations
                     b.ToTable("Paths");
                 });
 
-            modelBuilder.Entity("ImmigrationHack.Services.src.Data.Entities.UserAuth", b =>
+            modelBuilder.Entity("ImmigrationHack.Services.src.Data.Entities.User", b =>
                 {
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Password")
+                    b.Property<string>("CitizenCountry")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CurrentStatus")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Email");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("UsersAuth");
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("ImmigrationHack.Services.src.Data.Entities.UserDocument", b =>
@@ -136,31 +150,6 @@ namespace ImmigrationHack.Migrations
                     b.ToTable("UserDocuments");
                 });
 
-            modelBuilder.Entity("ImmigrationHack.Services.src.Data.Entities.UserInfo", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("CitizenCountry")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CurrentStatus")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UsersInfo");
-                });
-
             modelBuilder.Entity("ImmigrationHack.Services.src.Data.Entities.UserPath", b =>
                 {
                     b.Property<Guid>("Id")
@@ -170,12 +159,9 @@ namespace ImmigrationHack.Migrations
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("UserInfoId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserInfoId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserPaths");
                 });
@@ -201,7 +187,7 @@ namespace ImmigrationHack.Migrations
             modelBuilder.Entity("ImmigrationHack.Services.src.Data.Entities.Path", b =>
                 {
                     b.HasOne("ImmigrationHack.Services.src.Data.Entities.Form", null)
-                        .WithMany("Paths")
+                        .WithMany("PathsRequired")
                         .HasForeignKey("FormId");
 
                     b.HasOne("ImmigrationHack.Services.src.Data.Entities.Path", null)
@@ -221,7 +207,7 @@ namespace ImmigrationHack.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ImmigrationHack.Services.src.Data.Entities.UserInfo", "UserInfo")
+                    b.HasOne("ImmigrationHack.Services.src.Data.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -229,23 +215,23 @@ namespace ImmigrationHack.Migrations
 
                     b.Navigation("DocumentType");
 
-                    b.Navigation("UserInfo");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ImmigrationHack.Services.src.Data.Entities.UserPath", b =>
                 {
-                    b.HasOne("ImmigrationHack.Services.src.Data.Entities.UserInfo", "UserInfo")
+                    b.HasOne("ImmigrationHack.Services.src.Data.Entities.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserInfoId")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("UserInfo");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ImmigrationHack.Services.src.Data.Entities.Form", b =>
                 {
-                    b.Navigation("Paths");
+                    b.Navigation("PathsRequired");
                 });
 
             modelBuilder.Entity("ImmigrationHack.Services.src.Data.Entities.Path", b =>

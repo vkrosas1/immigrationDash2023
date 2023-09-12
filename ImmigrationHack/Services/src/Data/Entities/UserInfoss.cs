@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace ImmigrationHack.Services.src.Data.Entities
 {
 
-    public class User
+    public class UserInfo
     {
         [Key]
         public Guid Id { get; set; }

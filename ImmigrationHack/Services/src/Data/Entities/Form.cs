@@ -11,8 +11,7 @@ namespace ImmigrationHack.Services.src.Data.Entities
         [ForeignKey("DocumentType")]
         public Guid DocumentTypeId { get; set; }
         public DocumentType DocumentType { get; set; }
-        public virtual IEnumerable<Path>? PathRequired { get; set; }
-
+        public virtual IEnumerable<Path>? Paths { get; set; }
     }
 }
 

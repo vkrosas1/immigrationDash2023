@@ -76,21 +76,26 @@ namespace ImmigrationHack.Services.src.Repository
             return (await _context.SaveChangesAsync()) > 0;
         }
 
-        public User? GetUserByKey(Guid? userId)
+        public UserInfo? GetUserByKey(Guid? userId)
         {
-            var user = _context.Users.Where(m => m.Id == userId).FirstOrDefault();
+            var user = _context.UsersInfo.Where(m => m.Id == userId).FirstOrDefault();
             return user;
         }
 
-        public User? GetUserByEmail(string? emailId)
+        public UserInfo? GetUserByEmail(string? emailId)
         {
-            var user = _context.Users.Where(m => m.Email == emailId).FirstOrDefault();
+            var user = _context.UsersInfo.Where(m => m.Email == emailId).FirstOrDefault();
             return user;
         }
 
         public List<UserDocument>? GetUserDocumentsByuserId(Guid userId)
         {
             return _context.UserDocuments.Where(m => m.UserId == userId).ToList();
+        }
+
+        public List<List<Data.Entities.Path>> GetEligiblePaths(Guid? userId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -68,7 +68,8 @@ function DocumentsController(props) {
             }
             {isError ? <h1>Request Failed</h1> : null}
             <ReactModal style={style} isOpen={isModalOpen}>
-                <DocumentView {...props} />
+                {"hello" }
+               {/* <DocumentView {...props} />*/}
             </ReactModal>
         </div>
     );
