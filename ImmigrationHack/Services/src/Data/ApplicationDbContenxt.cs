@@ -14,7 +14,8 @@ namespace ImmigrationHack.Services.src.Data
             _logger = logger;
         }
 
-        public DbSet<User> Users { get; set; }
+        public DbSet<UserAuth> UsersAuth { get; set; }
+        public DbSet<UserInfo> UsersInfo { get; set; }
         public DbSet<UserDocument> UserDocuments { get; set; }
         public DbSet<Entities.Path> Paths { get; set; }
         public DbSet<Form> Forms { get; set; }

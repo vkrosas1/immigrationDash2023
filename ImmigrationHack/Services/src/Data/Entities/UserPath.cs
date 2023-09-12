@@ -9,7 +9,7 @@ namespace ImmigrationHack.Services.src.Data.Entities
         public Guid Id { get; set; }
         [ForeignKey("User")]
         public Guid UserId { get; set; }
-        public virtual User User { get; set; }
+        public virtual UserInfo UserInfo { get; set; }
         public virtual IEnumerable<Path>? AvailablePaths { get; set; }
 
     }
