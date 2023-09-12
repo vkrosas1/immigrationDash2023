@@ -1,5 +1,6 @@
 /*import TreeView from "./TreeView";
 */
+import UserService from "../../api/UserService";
 import React, { useEffect, useState } from "react";
 
 function HomeController(props) {
@@ -8,23 +9,9 @@ function HomeController(props) {
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [isLogIn, setIsLogIn] = useState(false);
 
-    // User Login info (sample DB for testing)
-    const database = [
-        {
-            username: "user1",
-            password: "pass1"
-        },
-        {
-            username: "user2",
-            password: "pass2"
-        }
-    ];
-
     const errors = {
-        uname: "invalid username",
-        pass: "invalid password", 
-        repass: "passwords do not match",
-        unameex: "username already exists"
+        uname: "invalid username or password",
+        repass: "passwords do not match"
     };
 
     const handleSubmit = (event) => {
@@ -35,32 +22,23 @@ function HomeController(props) {
 
         if (isLogIn) {
             // Find user login info
-            const userData = database.find((user) => user.username === uname.value);
+            const userData = await UserSerivce.authenticateUser(uname, pass);
 
             // Compare user info
             if (userData) {
-                if (userData.password !== pass.value) {
-                    // Invalid password
-                    setErrorMessages({ name: "pass", message: errors.pass });
-                } else {
-                    setIsSubmitted(true);
-                }
-            } else {
-                // Username not found
+                await UserService.getUserInfo(uname);
+            }
+            else {
+                // Username or password incorrect
                 setErrorMessages({ name: "uname", message: errors.uname });
             }
         }
         else {
-            if (database.find((user) => user.username === uname.value)) {
-                setErrorMessages({ name: "uname", message: errors.unameex });
-            }
-            else if (pass.value !== repass.value) {
+            if (pass.value !== repass.value) {
                 setErrorMessages({ name: "repass", message: errors.repass });
             }
             else {
-                database.push((user) => user.username === uname.value);
-                database.push((user) => user.password === pass.value);
-
+                await UserService.createUser(uname);
             }
         }
     };
