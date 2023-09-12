@@ -66,5 +66,15 @@ namespace ImmigrationHack.Services.src.Services
         {
             throw new NotImplementedException();
         }
+
+        public bool AuthenticateUser(string emailId, string password)
+        {
+            User user = GetUserByEmail(emailId);
+            if (user == null)
+            {
+                return false;
+            }
+           return user.Password.Equals(password);
+        }
     }
 }
