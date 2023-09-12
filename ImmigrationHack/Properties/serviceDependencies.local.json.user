@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "cosmosdb1": {
+      "restored": true,
+      "restoreTime": "2023-09-11T21:38:12.8623607Z"
+    },
+    "secrets1": {
+      "restored": true,
+      "restoreTime": "2023-09-11T21:33:24.4587866Z"
+    }
+  },
+  "parameters": {
+    "cosmosdb1.subscriptionId": {
+      "Name": "cosmosdb1.subscriptionId",
+      "Type": "subscription",
+      "Value": "ed839302-1441-4e66-8dbc-d2d04936a61d"
+    },
+    "cosmosdb1.resourceGroupName": {
+      "Name": "cosmosdb1.resourceGroupName",
+      "Type": "resourceGroup",
+      "Value": "ImmigrationDash"
+    }
+  }
+}
