@@ -12,7 +12,7 @@ function DocumentsList(props) {
             doc.status = doc.status || STATUSES.NOT_STARTED.key;
             return (
                 <div key={index} onClick={generateOnClick(doc)} class="column is-2">
-                    <div class={`card p-2 has-background-${STATUSES[doc.status].className}`}>{doc.id}</div>
+                    <div class={`card p-2 has-background-${STATUSES[doc.status].className}`}>{"hello"}</div>
                 </div>
             )
         })
