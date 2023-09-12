@@ -1,8 +1,7 @@
 ﻿using ImmigrationHack.Services.src.Data;
 using ImmigrationHack.Services.src.Data.Entities;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System.Linq;
-using System.Reflection;
+using Path = ImmigrationHack.Services.src.Data.Entities.Path;
 
 namespace ImmigrationHack.Services.src.Repository
 {
@@ -76,15 +75,15 @@ namespace ImmigrationHack.Services.src.Repository
             return (await _context.SaveChangesAsync()) > 0;
         }
 
-        public UserInfo? GetUserByKey(Guid? userId)
+        public User? GetUserByKey(Guid? userId)
         {
-            var user = _context.UsersInfo.Where(m => m.Id == userId).FirstOrDefault();
+            var user = _context.Users.Where(m => m.Id == userId).FirstOrDefault();
             return user;
         }
 
-        public UserInfo? GetUserByEmail(string? emailId)
+        public User? GetUserByEmail(string? emailId)
         {
-            var user = _context.UsersInfo.Where(m => m.Email == emailId).FirstOrDefault();
+            var user = _context.Users.Where(m => m.Email == emailId).FirstOrDefault();
             return user;
         }
 
@@ -93,7 +92,68 @@ namespace ImmigrationHack.Services.src.Repository
             return _context.UserDocuments.Where(m => m.UserId == userId).ToList();
         }
 
-        public List<List<Data.Entities.Path>> GetEligiblePaths(Guid? userId)
+        public List<List<Data.Entities.Path>> GetEligiblePaths(Guid userId)
+        {
+            var userDocs = GetUserDocumentsByuserId(userId);
+            var availablePaths = new List<List<Data.Entities.Path>>();
+            foreach (var userDoc in userDocs)
+            {
+                List<List<Data.Entities.Path>> paths = GetPathsForDocType(userDoc.DocumentTypeId);
+                foreach (var path in paths)
+                {
+                    if (path == null || path.Count == 0 || IsPathAlreadyAdded(path, availablePaths))
+                    {
+                        continue;
+                    }
+                    availablePaths.Add(path);
+                    
+                }
+            }
+            return availablePaths;
+        }
+
+        private bool IsPathAlreadyAdded(List<Path> path, List<List<Path>> availablePaths)
+        {
+            foreach (var availablepath in availablePaths)
+            {
+                if (path[0].Name == availablepath[0].Name)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private List<List<Data.Entities.Path>> GetPathsForDocType(Guid documentTypeId)
+        {
+            var path = GetAsync<Path>(documentTypeId).Result;
+            List<List<Path>> listOfPaths = new List<List<Path>>();
+            if(path == null || path.NextEligiblePaths?.ToList().Count == 0)
+            {
+                listOfPaths.Add (new List < Path> { path });
+            }
+            else
+            {
+                foreach (var nextEligiblePath in path.NextEligiblePaths)
+                {
+                    var subLists = GetPathsForDocType(path.DocumentTypeId);
+                    foreach (var subList in subLists)
+                    {
+                        if (subList != null && subList.Count > 0)
+                        {
+                            List<Path> listpath = new List<Path>();
+                            listpath.AddRange (subList);
+                            listOfPaths.Add (listpath);
+                        }
+                    }
+                }
+            }
+            return listOfPaths;
+
+
+        }
+
+        public List<List<Path>> GetEligiblePaths(Guid? userId)
         {
             throw new NotImplementedException();
         }

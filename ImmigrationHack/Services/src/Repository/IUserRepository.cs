@@ -12,11 +12,13 @@ namespace ImmigrationHack.Services.src.Repository
         IQueryable<T> GetAll<T>() where T : class;
         ValueTask<T?> GetAsync<T>(Guid id) where T : class;
         EntityEntry<T> GetEntry<T>(T entity) where T : class;
-        UserInfo? GetUserByKey(Guid? userId);
-        UserInfo? GetUserByEmail(string? emailId);
+        User? GetUserByKey(Guid? userId);
+        User? GetUserByEmail(string emailId);
         List<UserDocument>? GetUserDocumentsByuserId(Guid userId);
         Task<bool> SaveChangesAsync();
         void Update<T>(T entity) where T : class;
-        List<List<Path>> GetEligiblePaths(Guid? userId);
+        List<List<Path>> GetEligiblePaths(Guid userId);
+
+
     }
 }
