@@ -57,10 +57,8 @@ function DocumentView(props) {
     curr.setDate(curr.getDate() + 3);
     var date = curr.toISOString().substring(0, 10);
 
-    const getDisplay = () => {
-
+    const getCountry = () => {
         return (
-
             <select class="form-select" id="country" name="country">
                 <option value="">country</option>
                 <option value="Afghanistan">Afghanistan</option>
@@ -318,65 +316,42 @@ function DocumentView(props) {
             </select>
         );
     }
-        return (
-            <div className="App">
 
-                <form action={onSubmit()} method="post" className="documentsUpload">
-                    <DocDropdown
-                        isSearchable
-                        isMulti
-                        placeHolder="Select..."
-                        options={documentOptions}
-                        onChange={(value) => console.log(value)}
-                    />
-                    <ul>
-                        <li>
-                            <label for="issueDate">Issued date:</label>
-                            <input id="dateRequired" type="date" name="dateRequired" defaultValue={date} />
-                        </li>
-                        <li>
-                            <label for="expirationDate">Expiration date:</label>
-                            <input id="dateRequired" type="date" name="dateRequired" defaultValue={date} />
-                        </li>
-                        <li>
-                            <label for="issueCountry">Country issued:</label>
-                            <div className="countryOrigin">{getDisplay()}</div> 
-                        </li>
-                        <li>
-                            <label for="msg">Comments</label>
-                            <textarea id="msg" name="user_message"></textarea>
-                        </li>
+    return (
+        <div className="App">
 
-                        <button type="submit">Upload</button>
-                    </ul>
-                </form>
+            <form action={onSubmit()} method="post" className="documentsUpload">
+                <DocDropdown
+                    isSearchable
+                    isMulti
+                    placeHolder="Select..."
+                    options={documentOptions}
+                    onChange={(value) => console.log(value)}
+                />
+                <ul>
+                    <li>
+                        <label for="issueDate">Issued date:</label>
+                        <input id="dateRequired" type="date" name="dateRequired" defaultValue={date} />
+                    </li>
+                    <li>
+                        <label for="expirationDate">Expiration date:</label>
+                        <input id="dateRequired" type="date" name="dateRequired" defaultValue={date} />
+                    </li>
+                    <li>
+                        <label for="issueCountry">Country issued:</label>
+                        <div className="countryOrigin">{getCountry()}</div>
+                    </li>
+                    <li>
+                        <label for="msg">Comments</label>
+                        <textarea id="msg" name="user_message"></textarea>
+                    </li>
 
-            </div>
-        );
-        // create ui that will give a drop down of possible forms to upload and allows the user to input the name of the form
-        // and then upload the file to the server
+                    <button type="submit">Upload</button>
+                </ul>
+            </form>
 
-        /*
-            return (
-                <div class="is-flex is-flex-direction-column">
-                    <div class="columns">
-                        <div class="column is-one-third">
-                            <figure class="image is-2by3">
-                                <img src={imgSrc} alt="File Preview" />
-                            </figure>
-                            <input type='file' name='Select File' onChange={onChange} />
-                            <button class="button " onClick={onUpload}>Upload</button>
-                        </div>
-                      {*//*  <div class="column">
-<h1 class="is-underlined is-size-3">{props.selectedDocumentForm.id}</h1>
-<p class="is-size-5">{props.selectedDocumentForm.data}</p>
-</div>*//*}
         </div>
-        <div class="is-flex is-justify-content-end is-align-self-flex-end">
-          <button class="button" onClick={onClose}>Close</button>
-        </div>
-        </div>
-        );*/
-    }
+    );
+}
 
-    export default DocumentView;
+export default DocumentView;
