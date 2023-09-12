@@ -5,13 +5,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace ImmigrationHack.Services.src.Data.Entities
 {
 
-    public class UserInfo
+    public class User
     {
         [Key]
         public Guid Id { get; set; }
         public string Email { get; set; }
         public string Name { get; set; }
-
+        public string Password { get; set; }
         // Key
         //public DateTime Date { get; set; }
         public string? CitizenCountry { get; set; }

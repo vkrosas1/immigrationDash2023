@@ -23,7 +23,7 @@ namespace ImmigrationHack.Services.src.Data.Entities
 
         [ForeignKey("UserInfo")]
         public Guid UserId { get; set; }
-        public UserInfo UserInfo { get; set; }
+        public User UserInfo { get; set; }
 
     }
 }

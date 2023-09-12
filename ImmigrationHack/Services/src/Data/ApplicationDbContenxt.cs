@@ -14,13 +14,11 @@ namespace ImmigrationHack.Services.src.Data
             _logger = logger;
         }
 
-        public DbSet<UserAuth> UsersAuth { get; set; }
-        public DbSet<UserInfo> UsersInfo { get; set; }
+        public DbSet<User> Users { get; set; }
         public DbSet<UserDocument> UserDocuments { get; set; }
         public DbSet<Entities.Path> Paths { get; set; }
         public DbSet<Form> Forms { get; set; }
         public DbSet<DocumentType> DocumentTypes { get; set; }
-        public DbSet<UserPath> UserPaths { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
