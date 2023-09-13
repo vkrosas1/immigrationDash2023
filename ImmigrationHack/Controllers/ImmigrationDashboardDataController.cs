@@ -39,6 +39,17 @@ namespace Immigration_Dashboard_Server.Controllers
 
         }
 
+        [HttpGet]
+        [Route("/ImmigrationDashboard/GetUserInfo")]
+        [ActionName("GetUserInfo")]
+        [Consumes("application/json")]
+        [Produces("application/json", "application/xml")]
+        public Task<ActionResult<User>> GetUserInfo(string emailId)
+        {
+            return _service.GetUserByEmail(emailId);
+
+        }
+
         [HttpPost]
         [Route("/ImmigrationDashboard/UploadDocument")]
         [ActionName("UploadDocument")]
