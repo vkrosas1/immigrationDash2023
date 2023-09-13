@@ -1,6 +1,6 @@
 ﻿using ImmigrationHack.Services.src.Data.Entities;
 
-namespace ImmigrationHack.Services.src.Service
+namespace ImmigrationHack.Services.src
 {
     public interface IImmigrationService
     {
@@ -10,5 +10,6 @@ namespace ImmigrationHack.Services.src.Service
         Task<User> UpdateUser(Guid id, User user);
         Task<User> GetUser(Guid id);
         Task<UserDocument> UploadDocument(UserDocument req);
+        bool AuthenticateUser(string emailId, string password);
     }
 }

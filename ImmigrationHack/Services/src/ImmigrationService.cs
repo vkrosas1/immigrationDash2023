@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using ImmigrationHack.Services.src.Data.Entities;
 using ImmigrationHack.Services.src.Repository;
-using ImmigrationHack.Services.src.Service;
 
-namespace ImmigrationHack.Services.src.Services
+namespace ImmigrationHack.Services.src
 {
     public class ImmigrationService : IImmigrationService
     {
@@ -62,9 +61,21 @@ namespace ImmigrationHack.Services.src.Services
             return user;
         }
 
-        public Task<UserDocument> UploadDocument(UserDocument req)
+        public async Task<UserDocument> UploadDocument(UserDocument input)
         {
-            throw new NotImplementedException();
+            repository.Add(input);
+            await repository.SaveChangesAsync();
+            return input;
+        }
+
+        public bool AuthenticateUser(string emailId, string password)
+        {
+            User user = GetUserByEmail(emailId);
+            if (user == null)
+            {
+                return false;
+            }
+            return user.Password.Equals(password);
         }
     }
 }

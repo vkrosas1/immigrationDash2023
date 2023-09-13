@@ -1,14 +1,7 @@
-﻿using Immigration_Dashboard_Server.Models;
-using Immigration_Dashboard_Server.Services.Interfaces;
+﻿using AutoMapper;
+using ImmigrationHack.Services.src;
 using ImmigrationHack.Services.src.Data.Entities;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualStudio.Web.CodeGeneration.Utils;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection.Metadata;
 using User = ImmigrationHack.Services.src.Data.Entities.User;
 
 namespace Immigration_Dashboard_Server.Controllers
@@ -16,17 +9,45 @@ namespace Immigration_Dashboard_Server.Controllers
     [ApiController]
     public class ImmigrationDashboardDataController : ControllerBase
     {
+        private readonly IImmigrationService _service;
+
+        public ImmigrationDashboardDataController(
+            IImmigrationService service
+        )
+        {
+            _service = service;
+        }
 
         [HttpPost]
         [Route("/ImmigrationDashboard/CreateUser")]
         [ActionName("CreateUserAccount")]
-        public bool CreateUserAccount(string username, string password)
+        [Consumes("application/json")]
+        [Produces("application/json", "application/xml")]
+        public User CreateUserAccount(User user)
         {
-            User user = new User();
-            user.Email = username;
-            user.Password = password;
-            //user.Name = Request?.Form["name"];
-            return true;
+            return _service.CreateUser(user).Result;
+
+        }
+
+        [HttpPost]
+        [Route("/ImmigrationDashboard/AuthenticateUser")]
+        [ActionName("AuthenticateUser")]
+        [Consumes("application/json")]
+        [Produces("application/json", "application/xml")]
+        public bool AuthenticateAccount(User user)
+        {
+            return _service.AuthenticateUser(user.Email, user.Password);
+
+        }
+
+        [HttpPost]
+        [Route("/ImmigrationDashboard/UploadDocument")]
+        [ActionName("UploadDocument")]
+        [Consumes("application/json")]
+        [Produces("application/json", "application/xml")]
+        public UserDocument UploadDocument(UserDocument userDocument)
+        {
+            return _service.UploadDocument(userDocument).Result;
 
         }
 

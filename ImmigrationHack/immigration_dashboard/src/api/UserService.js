@@ -1,3 +1,4 @@
+import { BASE_URL } from "../Contstants";
 import Service from "./Axios";
 
 const authenticateUser = async function (email, password) {
@@ -6,7 +7,7 @@ const authenticateUser = async function (email, password) {
 
 const getUserID = async function (email) {
     const userID = Service.get(`getUserID`, { email }, {});
-    UserInformation['userID'] = userID;
+    User['userID'] = userID;
     return await userID;
 }
 
@@ -14,13 +15,25 @@ const getUserInfo = async function (email) {
     return await Service.get(`GetUserAndPass`, { email }, {});
 }
 
-const createUser = async function (email, password, first_name, last_name, country) {
-    UserInformation['email'] = email;
-    UserInformation['password'] = password;
-    UserInformation['first_name'] = first_name;
-    UserInformation['last_name'] = last_name;
-    UserInformation['country'] = country;
-    return await Service.postFormData(`CreateUserAccount`, UserInformation, {});
+/*function CreateUUID() {
+    return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+    )
+}*/
+const createUser = async function (email, name, password, country) {
+    User['Email'] = email;
+    User['Password'] = password;
+    User['Name'] = name;
+    User['CitizenCountry'] = country;
+    User['Id'] = "61ec4094-53f9-413b-fa76-08dbb3e68305";
+    return await Service.post(BASE_URL + '/CreateUser', User, {
+        headers: {
+            'Accept': 'application/json',
+            'Accept- Encoding':'gzip, deflate, br',
+            'Content- Type': 'application / json',
+            'Access-Control-Allow-Origin': '*'
+        }
+    });
 }
 
 const getUserDocumentForms = async function (userID) {
@@ -40,11 +53,11 @@ const createDocument = async function (formId, status) {
 }
 
 const uploadDocument = async function (formId, status, filename) {
-    UserInformation['formId'] = formId;
-    UserInformation['status'] = status;
-    UserInformation['filename'] = filename;
+    User['formId'] = formId;
+    User['status'] = status;
+    User['filename'] = filename;
 
-    return await Service.postFormData(`UploadUserDocument`, UserInformation, {});
+    return await Service.postFormData(`UploadUserDocument`, User, {});
 }
 
 const UserService = {
@@ -58,6 +71,6 @@ const UserService = {
     uploadDocument
 }
 
-const UserInformation = {}
+const User = {}
 
 export default UserService;

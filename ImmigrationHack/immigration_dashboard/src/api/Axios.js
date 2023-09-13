@@ -18,10 +18,10 @@ const get = async function (url, params, headers) {
     return await handleResponse(response);
 }
 
-const post = async function (url, body, isFormEncoded, headers) {
-    const response = server.post(url, body, {
+const post = async function (url, body, headers) {
+    const response = axios.post(url, body, {
         headers: {
-            'content-type': isFormEncoded ? 'application/x-www-form-urlencoded' : 'application/json',
+            'content-type': 'application/json',
             'charset': 'utf-8',
             ...headers
         }
@@ -30,7 +30,7 @@ const post = async function (url, body, isFormEncoded, headers) {
 }
 
 const postFormData = async function (url, formData, headers) {
-    const response = server.post(url, formData, { headers });
+    const response = axios.post(BASE_URL+"/"+url, formData, { headers });
     return await handleResponse(response);
 }
 

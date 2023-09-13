@@ -21,9 +21,9 @@ namespace ImmigrationHack.Services.src.Data.Entities
         public Guid DocumentTypeId { get; set; }
         public DocumentType DocumentType { get; set; }
 
-        [ForeignKey("UserInfo")]
+        [ForeignKey("User")]
         public Guid UserId { get; set; }
-        public User UserInfo { get; set; }
+        public User? User { get; set; }
 
     }
 }
