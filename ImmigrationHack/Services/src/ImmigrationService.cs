@@ -1,6 +1,8 @@
 ﻿using ImmigrationHack.Services.src.Data.Entities;
 using ImmigrationHack.Services.src.Repository;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ImmigrationHack.Services.src
 {
@@ -134,6 +136,16 @@ namespace ImmigrationHack.Services.src
             return user == null ? 
                 new ObjectResult(new { error = "User doesnt exist" }){StatusCode = 404} :
                 new ObjectResult(new { error = "Wrong password" }) { StatusCode = 401};
+        }
+
+        public async Task<ActionResult<List<UserDocument>>> GetAllDocuments(Guid userid)
+        {
+            var userDocuments = repository.GetUserDocumentsByuserId(userid);
+             if(userDocuments == null || userDocuments.Count == 0)
+             {
+                 return new ObjectResult(new { error = "User doesnt exist" }) { StatusCode = 400 };
+             }
+             return new ObjectResult(userDocuments) { StatusCode = 200 };
         }
     }
 }

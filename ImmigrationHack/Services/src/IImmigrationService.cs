@@ -11,6 +11,7 @@ namespace ImmigrationHack.Services.src
         Task<ActionResult<User>> UpdateUser(Guid id, User user);
         Task<ActionResult<User>> GetUser(Guid id);
         Task<ActionResult<UserDocument>> UploadDocument(UserDocument req);
+        Task<ActionResult<List<UserDocument>>> GetAllDocuments(Guid userid);
         Task<ActionResult<bool>> AuthenticateUser(string emailId, string password);
     }
 }

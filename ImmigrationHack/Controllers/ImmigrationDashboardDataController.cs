@@ -50,5 +50,16 @@ namespace Immigration_Dashboard_Server.Controllers
 
         }
 
+        [HttpGet]
+        [Route("/ImmigrationDashboard/GetAllDocuments")]
+        [ActionName("GetAllDocuments")]
+        [Consumes("application/json")]
+        [Produces("application/json", "application/xml")]
+        public Task<ActionResult<List<UserDocument>>> GetAllDocuments(Guid userId)
+        {
+            return _service.GetAllDocuments(userId);
+
+        }
+
     }
 }
