@@ -191,5 +191,18 @@ namespace ImmigrationHack.Services.src
 
             };
         }
+
+        public async Task<ActionResult<DocumentType>> GetDocumentTypeByName(string name)
+        {
+            var docType =  repository.GetDocumentTypeByName(name);
+            if (docType != null)
+            {
+                return new ObjectResult(docType)
+                {
+                    StatusCode = 200
+                };
+            }
+            return new ObjectResult(new { error = "User Not Found" }) { StatusCode = 404 };
+        }
     }
 }

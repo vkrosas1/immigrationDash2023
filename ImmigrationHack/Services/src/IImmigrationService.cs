@@ -16,5 +16,6 @@ namespace ImmigrationHack.Services.src
         Task<ActionResult<bool>> AuthenticateUser(string emailId, string password);
         Task<ActionResult<DocumentType>> AddDocumentType(DocumentType docType);
         Task<ActionResult<Path>> AddPath(Path path);
+        Task<ActionResult<DocumentType>> GetDocumentTypeByName (string name);
     }
 }
