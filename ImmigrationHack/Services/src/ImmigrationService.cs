@@ -17,6 +17,11 @@ namespace ImmigrationHack.Services.src
 
         public async Task<User> CreateUser(User input)
         {
+            var userEmail = repository.GetUserByEmail(input.Email);
+            if (userEmail != null)
+            {
+                throw new InvalidOperationException($"User already exists");
+            }
             repository.Add(input);
             await repository.SaveChangesAsync();
             return input;

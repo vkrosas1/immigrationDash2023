@@ -17,7 +17,8 @@ function HomeController(props) {
 
     const errors = {
         uname: "invalid username or password",
-        repass: "passwords do not match"
+        repass: "passwords do not match",
+        userex: "user already exists"
     };
 
     const handleSubmit = (event) => {
@@ -43,7 +44,10 @@ function HomeController(props) {
                 setErrorMessages({ name: "repass", message: errors.repass });
             }
             else {
-                UserService.createUser(email, pass, fname, lname, country);
+                const newUser = UserService.createUser(email, pass, fname, lname, country);
+                if (!newUser) {
+                    setErrorMessages({ name: "userex", message: errors.userex });
+                }
             }
         }
     };
