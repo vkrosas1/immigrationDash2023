@@ -95,5 +95,16 @@ namespace Immigration_Dashboard_Server.Controllers
 
         }
 
+
+        [HttpGet]
+        [Route("/ImmigrationDashboard/GetDocumentTypeByName")]
+        [ActionName("GetDocumentTypeByName")]
+        [Consumes("application/json")]
+        [Produces("application/json", "application/xml")]
+        public Task<ActionResult<DocumentType>> GetDocumentTypeByName(string name)
+        {
+            return _service.GetDocumentTypeByName(name);
+
+        }
     }
 }
