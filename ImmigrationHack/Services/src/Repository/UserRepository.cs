@@ -149,13 +149,16 @@ namespace ImmigrationHack.Services.src.Repository
                 }
             }
             return listOfPaths;
-
-
         }
 
-        public List<List<Path>> GetEligiblePaths(Guid? userId)
+        public DocumentType? GetDocumentTypeByName(string name)
         {
-            throw new NotImplementedException();
+            return _context.DocumentTypes.Where(m => m.Name == name).FirstOrDefault();
+        }
+
+        public Path? GetPathByName(string name)
+        {
+            return _context.Paths.Where(m => m.Name == name).FirstOrDefault();
         }
     }
 }
