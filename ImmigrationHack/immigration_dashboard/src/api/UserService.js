@@ -71,13 +71,15 @@ const createDocument = async function (formId, status) {
     return await Service.post(`CreateUserDocument`, body, false);
 }
 
-const uploadDocument = async function (formId, status, filename) {
-    User['formId'] = formId;
-    User['status'] = status;
-    User['filename'] = filename;
+/*const uploadDocument = async function (expirationDate, issueDate, issueCountry, docTypeId, user) {
+    User['ExpirationDate'] = expirationDate;
+    User['IssueDate'] = issueDate;
+    User['IssueCountry'] = issueCountry;
+    User['DocumentTypeId'] = docTypeId;
+    User['UserId'] = user.Id;
 
-    return await Service.postFormData(`UploadUserDocument`, User, {});
-}
+    return await Service.postFormData(`UploadDocument`, User, {});
+}*/
 
 const UserService = {
     createUser,
@@ -86,8 +88,7 @@ const UserService = {
     getUserInfo,
     getDocuments,
     getUserDocumentForms,
-    createDocument,
-    uploadDocument
+    createDocument
 }
 
 const User = {}

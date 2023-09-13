@@ -31,7 +31,11 @@ function LoginController(props) {
 
             // Compare user info
             if (userData) {
-                UserService.getUserInfo(email);
+                UserService.getUserInfo(email).then((result) => {
+                    console.log(result);
+                    return result;
+                });
+                console.log("authenticated user"); 
             }
             else {
                 // Username or password incorrect

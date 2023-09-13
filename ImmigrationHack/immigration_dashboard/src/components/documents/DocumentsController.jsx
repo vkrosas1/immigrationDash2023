@@ -2,11 +2,19 @@ import { useState } from "react";
 import FileService from "../../api/FileService";
 import { STATUSES, TEMP_USER } from "../../Contstants";
 import DocDropdown from "./DocDropdown";
+import UserService from "../../api/UserService";
 
 function DocumentView(props) {
 
     const [file, setFile] = useState(null);
     const [imgSrc, setImgSrc] = useState("https://bulma.io/images/placeholders/320x480.png")
+    const [errorMessages, setErrorMessages] = useState({});
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    const [expirDate, setExpirDate] = useState(null);
+    const [issueDate, setIssueDate] = useState(null);
+    const [issueCoun, setIssueCoun] = useState("");
+    const [docType, setDocType] = useState(null);
+
     // const [isLoading, setIsLoading] = useState(true);
     // const [isError, setIsError] = useState(false);
 
@@ -37,9 +45,11 @@ function DocumentView(props) {
     }
 
     const onSubmit = async (event) => {
-        const result = await FileService.uploadDocument(TEMP_USER.id, props.selectedDocumentForm.formId, STATUSES.IN_PROGRESS.key, file.name, file);
+        const result = await FileService.uploadDocument();
         setFile(null)
         props.setIsModalOpen(false);
+
+        //UserService.uploadDocument()
     }
 
     const documentOptions = [
@@ -326,20 +336,21 @@ function DocumentView(props) {
                     isMulti
                     placeHolder="Select..."
                     options={documentOptions}
-                    onChange={(value) => console.log(value)}
+                    value={docType}
+                    
                 />
                 <ul>
                     <li>
                         <label for="issueDate">Issued date:</label>
-                        <input id="dateRequired" type="date" name="dateRequired" defaultValue={date} />
+                        <input id="dateRequired" type="date" name="dateRequired" defaultValue={date} value={issueDate} onChange={(e) => setIssueDate(e.target.value)} />
                     </li>
                     <li>
                         <label for="expirationDate">Expiration date:</label>
-                        <input id="dateRequired" type="date" name="dateRequired" defaultValue={date} />
+                        <input id="dateRequired" type="date" name="dateRequired" defaultValue={date} value={expirDate} onChange={(e) => setExpirDate(e.target.value)} />
                     </li>
                     <li>
                         <label for="issueCountry">Country issued:</label>
-                        <div className="countryOrigin">{getCountry()}</div>
+                        <div className="countryOrigin" value={issueCoun} onChange={(e) => setIssueCoun(e.target.value)}>{getCountry()}</div>
                     </li>
                     <li>
                         <label for="msg">Comments</label>
