@@ -61,9 +61,11 @@ namespace ImmigrationHack.Services.src
             return user;
         }
 
-        public Task<UserDocument> UploadDocument(UserDocument req)
+        public async Task<UserDocument> UploadDocument(UserDocument input)
         {
-            throw new NotImplementedException();
+            repository.Add(input);
+            await repository.SaveChangesAsync();
+            return input;
         }
 
         public bool AuthenticateUser(string emailId, string password)
