@@ -19,18 +19,17 @@ namespace Immigration_Dashboard_Server.Controllers
     {
 
         [HttpPost]
-        [Route("/ImmigrationDashboard/CreateUser")]
-        [ActionName("CreateUserAccount")]
-        public bool CreateUserAccount(string username, string password, string firstName, string lastName, string country)
+        [Route("/CreateUser")]
+        [ActionName("CreateUser")]
+        public User CreateUser(User user)
         {
-            User user = new User();
-            user.Email = username;
-            user.Password = password;
-            user.CitizenCountry = country;
-            user.Name = firstName + " " + lastName;
-           
+            /* user.Email = username;
+             user.Password = password;
+             user.CitizenCountry = country;
+             user.Name = firstName + " " + lastName;*/
+
             //user.Name = Request?.Form["name"];
-            return true;
+            return user;
 
         }
 

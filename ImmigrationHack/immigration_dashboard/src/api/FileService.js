@@ -18,7 +18,8 @@ const getForm = async function (formId) {
 }
 
 const getAllForms = async function () {
-    return await Service.get(`GetAllForms`, {}, {});
+    return true; 
+    //return await Service.get(`GetAllForms`, {}, {});
 }
 
 const createDocument = async function (userId, formId, status) {

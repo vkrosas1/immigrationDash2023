@@ -1,4 +1,4 @@
-export const BASE_URL = 'https://localhost:44368/ImmigrationDashboard/';
+export const BASE_URL = 'https://localhost:7190/ImmigrationDashboard';
 export const USER_ID = '1';
 export const STATUSES = {
     NOT_STARTED: {
