@@ -15,41 +15,41 @@ function DocumentView(props) {
     const [issueCoun, setIssueCoun] = useState("");
     const [docType, setDocType] = useState(null);
 
-    // const [isLoading, setIsLoading] = useState(true);
-    // const [isError, setIsError] = useState(false);
+   
 
-    // useEffect(() => {
-    //   async function getDocumentForm() {
-
-    //   }
-    //   getDocumentForm();
-    // }, [])
-
-    const onChange = (event) => {
+   /* const onChange = (event) => {
         if (event.target.files && event.target.files.length) {
             setFile(event.target.files[0]);
         } else {
             setFile(null);
         }
-    }
+    }*/
 
-    const onClose = (event) => {
+  /*  const onClose = (event) => {
         setFile(null);
         props.setIsModalOpen(false);
-    }
+    }*/
 
-    const onUpload = async (event) => {
+   /* const onUpload = async (event) => {
         const result = await FileService.uploadDocument(TEMP_USER.id, props.selectedDocumentForm.formId, STATUSES.IN_PROGRESS.key, file.name, file);
         setFile(null)
         props.setIsModalOpen(false);
-    }
+    }*/
 
     const onSubmit = async (event) => {
-        const result = await FileService.uploadDocument();
-        setFile(null)
-        props.setIsModalOpen(false);
+        const user = await UserService.getUserInfo("viv1@gmail.com").then((result) => {
+            console.log(result);
+            return result;
+        });
 
-        //UserService.uploadDocument()
+        const docType = await FileService.addDocumentType("Birth Certificate").then((result) => {
+            console.log(result);
+            return result;
+        }); // testing only
+        FileService.uploadDocument(expirDate, issueDate, issueCoun, docType, user.id);
+        setFile(null)
+        //props.setIsModalOpen(false);
+
     }
 
     const documentOptions = [
@@ -330,7 +330,7 @@ function DocumentView(props) {
     return (
         <div className="App">
 
-            <form action={onSubmit()} method="post" className="documentsUpload">
+            <form method="post" className="documentsUpload">
                 <DocDropdown
                     isSearchable
                     isMulti
@@ -348,16 +348,16 @@ function DocumentView(props) {
                         <label for="expirationDate">Expiration date:</label>
                         <input id="dateRequired" type="date" name="dateRequired" defaultValue={date} value={expirDate} onChange={(e) => setExpirDate(e.target.value)} />
                     </li>
-                    <li>
+                   {/* <li>
                         <label for="issueCountry">Country issued:</label>
                         <div className="countryOrigin" value={issueCoun} onChange={(e) => setIssueCoun(e.target.value)}>{getCountry()}</div>
-                    </li>
+                    </li>*/}
                     <li>
                         <label for="msg">Comments</label>
                         <textarea id="msg" name="user_message"></textarea>
                     </li>
 
-                    <button type="submit">Upload</button>
+                    <button type="submit" action={onSubmit()}>Upload</button>
                 </ul>
             </form>
 

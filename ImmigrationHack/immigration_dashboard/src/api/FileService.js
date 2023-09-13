@@ -31,14 +31,33 @@ const createDocument = async function (userId, formId, status) {
     return await Service.post(`CreateUserDocument`, body, false);
 }
 
-const uploadDocument = async function (expirationDate, issueDate, issueCountry, docTypeId, user) {
+const addDocumentType = async function (docName) { 
+    Doc['Name'] = docName;
+    return await Service.postFormData(`AddDocumentType`, Doc, {
+        headers: {
+            'Accept': 'application/json',
+            'Accept- Encoding': 'gzip, deflate, br',
+            'Content- Type': 'application / json',
+            'Access-Control-Allow-Origin': '*'
+        }
+    });
+}
+
+const uploadDocument = async function (expirationDate, issueDate, issueCountry, documentType, userId) {
     Doc['ExpirationDate'] = expirationDate;
     Doc['IssueDate'] = issueDate;
     Doc['IssueCountry'] = issueCountry;
-    Doc['DocumentTypeId'] = docTypeId;
-    Doc['UserId'] = user.Id;
+    Doc['DocumentType'] = documentType;
+    Doc['UserId'] = userId;
 
-    return await Service.postFormData(`UploadDocument`, Doc, {});
+    return await Service.postFormData(`UploadDocument`, Doc, {
+        headers: {
+            'Accept': 'application/json',
+            'Accept- Encoding': 'gzip, deflate, br',
+            'Content- Type': 'application / json',
+            'Access-Control-Allow-Origin': '*'
+        }
+    });
 }
 
 const FileService = {
@@ -47,7 +66,8 @@ const FileService = {
     getDocument,
     createDocument,
     uploadDocument,
-    getAllForms
+    getAllForms,
+    addDocumentType
 }
 const Doc = {}
 
