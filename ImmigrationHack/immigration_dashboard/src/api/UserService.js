@@ -10,8 +10,8 @@ const getUserID = async function (email) {
     return await userID;
 }
 
-const getUserInfo = async function (userID) {
-    return await Service.get(`GetUserAndPass`, { userID }, {});
+const getUserInfo = async function (email) {
+    return await Service.get(`GetUserAndPass`, { email }, {});
 }
 
 const createUser = async function (email, password, first_name, last_name, country) {
