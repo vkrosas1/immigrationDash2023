@@ -4,7 +4,7 @@ import UserService from "../../api/UserService";
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 
-function HomeController(props) {
+function LoginController(props) {
     // React States
     const [errorMessages, setErrorMessages] = useState({});
     const [isSubmitted, setIsSubmitted] = useState(false);
@@ -89,4 +89,4 @@ function HomeController(props) {
     );
 }
 
-export default HomeController;
+export default LoginController;
