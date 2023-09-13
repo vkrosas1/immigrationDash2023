@@ -11,7 +11,6 @@ function LoginController(props) {
     const [isLogIn, setIsLogIn] = useState(false);
     const [fname, setFName] = useState("");
     const [email, setEmail] = useState("");
-    const [lname, setLName] = useState("");
     const [pass, setPass] = useState("");
     const [repass, setRepass] = useState("");
     const [country, setCountry] = useState("");
@@ -38,7 +37,7 @@ function LoginController(props) {
                 setErrorMessages({ name: "repass", message: errors.repass });
             }
             else {
-                UserService.createUser(email, pass, fname, lname, country).then((result) => {
+                UserService.createUser(email, fname, pass, country).then((result) => {
                     result.isSuccessful ? setIsSubmitted(true) : setErrorMessages({ name: "uname", message: errors.userex });
                 });
             }
@@ -63,8 +62,7 @@ function LoginController(props) {
                     </div>
                     <div> {isLogIn ? '' :
                         <div><input placeholder="Re-enter password" type="password" name="repass" value={repass} onChange={(e) => setRepass(e.target.value)} required />
-                            <input placeholder="First Name" type="text" value={fname} onChange={(e) => setFName(e.target.value)} required />
-                            <input placeholder="Last Name" type="text" value={lname} onChange={(e) => setLName(e.target.value)} required />
+                            <input placeholder="Name" type="text" value={fname} onChange={(e) => setFName(e.target.value)} required />
                             <input placeholder="Country of Citizenship" type="text" value={country} onChange={(e) => setCountry(e.target.value)} required />
                             {renderErrorMessage("repass")}
                         </div>}</div>
