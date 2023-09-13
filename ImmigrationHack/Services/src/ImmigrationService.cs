@@ -147,5 +147,49 @@ namespace ImmigrationHack.Services.src
              }
              return new ObjectResult(userDocuments) { StatusCode = 200 };
         }
+
+        public async Task<ActionResult<DocumentType>> AddDocumentType(DocumentType docType)
+        {
+            var existingDocType = repository.GetDocumentTypeByName(docType.Name);
+            if (existingDocType != null)
+            {
+                return new ObjectResult(new { error = "Dcoument Type Already Exists" }) { StatusCode = 500 };
+            }
+            repository.Add(docType);
+            if (await repository.SaveChangesAsync())
+            {
+                return new ObjectResult(docType)
+                {
+                    StatusCode = 200
+                };
+            }
+            return new ObjectResult(new { error = "Unable to create documentType" })
+            {
+                StatusCode = 500,
+
+            };
+        }
+
+        public async Task<ActionResult<Data.Entities.Path>> AddPath(Data.Entities.Path path)
+        {
+            var existing = repository.GetPathByName(path.Name);
+            if (existing != null)
+            {
+                return new ObjectResult(new { error = "Path Already Exists" }) { StatusCode = 500 };
+            }
+            repository.Add(path);
+            if (await repository.SaveChangesAsync())
+            {
+                return new ObjectResult(path)
+                {
+                    StatusCode = 200
+                };
+            }
+            return new ObjectResult(new { error = "Unable to create path" })
+            {
+                StatusCode = 500,
+
+            };
+        }
     }
 }

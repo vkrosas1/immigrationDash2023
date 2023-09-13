@@ -12,7 +12,7 @@ namespace ImmigrationHack.Services.src.Data.Entities
         public virtual IEnumerable<Path>? NextEligiblePaths { get; set; }
         [ForeignKey("DocumentType")]
         public Guid DocumentTypeId { get; set; }
-        public DocumentType DocumentType { get; set; }
+        public DocumentType? DocumentType { get; set; }
     }
 }
 

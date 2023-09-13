@@ -2,6 +2,7 @@
 using ImmigrationHack.Services.src.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 using User = ImmigrationHack.Services.src.Data.Entities.User;
+using Path = ImmigrationHack.Services.src.Data.Entities.Path;
 
 namespace Immigration_Dashboard_Server.Controllers
 {
@@ -69,6 +70,28 @@ namespace Immigration_Dashboard_Server.Controllers
         public Task<ActionResult<List<UserDocument>>> GetAllDocuments(Guid userId)
         {
             return _service.GetAllDocuments(userId);
+
+        }
+
+        [HttpPost]
+        [Route("/ImmigrationDashboard/AddDocumentType")]
+        [ActionName("AddDocumentType")]
+        [Consumes("application/json")]
+        [Produces("application/json", "application/xml")]
+        public Task<ActionResult<DocumentType>> AddDocumentType(DocumentType documentType)
+        {
+            return _service.AddDocumentType(documentType);
+
+        }
+
+        [HttpPost]
+        [Route("/ImmigrationDashboard/AddPath")]
+        [ActionName("AddPath")]
+        [Consumes("application/json")]
+        [Produces("application/json", "application/xml")]
+        public Task<ActionResult<Path>> AddPath(Path path)
+        {
+            return _service.AddPath(path);
 
         }
 

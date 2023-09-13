@@ -1,5 +1,6 @@
 ﻿using ImmigrationHack.Services.src.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Path = ImmigrationHack.Services.src.Data.Entities.Path;
 
 namespace ImmigrationHack.Services.src
 {
@@ -13,5 +14,7 @@ namespace ImmigrationHack.Services.src
         Task<ActionResult<UserDocument>> UploadDocument(UserDocument req);
         Task<ActionResult<List<UserDocument>>> GetAllDocuments(Guid userid);
         Task<ActionResult<bool>> AuthenticateUser(string emailId, string password);
+        Task<ActionResult<DocumentType>> AddDocumentType(DocumentType docType);
+        Task<ActionResult<Path>> AddPath(Path path);
     }
 }
