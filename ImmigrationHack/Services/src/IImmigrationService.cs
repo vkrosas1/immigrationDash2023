@@ -1,6 +1,6 @@
 ﻿using ImmigrationHack.Services.src.Data.Entities;
 
-namespace ImmigrationHack.Services.src.Service
+namespace ImmigrationHack.Services.src
 {
     public interface IImmigrationService
     {

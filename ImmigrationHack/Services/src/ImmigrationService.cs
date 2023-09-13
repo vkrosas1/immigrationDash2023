@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using ImmigrationHack.Services.src.Data.Entities;
 using ImmigrationHack.Services.src.Repository;
-using ImmigrationHack.Services.src.Service;
 
-namespace ImmigrationHack.Services.src.Services
+namespace ImmigrationHack.Services.src
 {
     public class ImmigrationService : IImmigrationService
     {
@@ -74,7 +73,7 @@ namespace ImmigrationHack.Services.src.Services
             {
                 return false;
             }
-           return user.Password.Equals(password);
+            return user.Password.Equals(password);
         }
     }
 }

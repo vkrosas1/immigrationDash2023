@@ -1,3 +1,4 @@
+import { BASE_URL } from "../Contstants";
 import Service from "./Axios";
 
 const authenticateUser = async function (email, password) {
@@ -25,7 +26,14 @@ const createUser = async function (email, name, password, country) {
     User['Name'] = name;
     User['CitizenCountry'] = country;
     User['Id'] = "61ec4094-53f9-413b-fa76-08dbb3e68305";
-    return await Service.postFormData(`CreateUser`, User, {});
+    return await Service.post(BASE_URL + '/CreateUser', User, {
+        headers: {
+            'Accept': 'application/json',
+            'Accept- Encoding':'gzip, deflate, br',
+            'Content- Type': 'application / json',
+            'Access-Control-Allow-Origin': '*'
+        }
+    });
 }
 
 const getUserDocumentForms = async function (userID) {

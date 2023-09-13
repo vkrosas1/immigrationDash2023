@@ -1,15 +1,6 @@
-﻿using Immigration_Dashboard_Server.Models;
-using Immigration_Dashboard_Server.Services.Interfaces;
-using ImmigrationHack.Services.src.Data.Entities;
-using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using ImmigrationHack.Services.src;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.VisualStudio.Web.CodeGeneration.Utils;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.Metrics;
-using System.IO;
-using System.Linq;
-using System.Reflection.Metadata;
 using User = ImmigrationHack.Services.src.Data.Entities.User;
 
 namespace Immigration_Dashboard_Server.Controllers
@@ -17,19 +8,28 @@ namespace Immigration_Dashboard_Server.Controllers
     [ApiController]
     public class ImmigrationDashboardDataController : ControllerBase
     {
+        private readonly IImmigrationService _service;
+
+        public ImmigrationDashboardDataController(
+            IImmigrationService service
+        )
+        {
+            _service = service;
+        }
 
         [HttpPost]
-        [Route("/CreateUser")]
-        [ActionName("CreateUser")]
-        public User CreateUser(User user)
+        [Route("/ImmigrationDashboard/CreateUser")]
+        [ActionName("CreateUserAccount")]
+        [Consumes("application/json")]
+        [Produces("application/json", "application/xml")]
+        public User CreateUserAccount(User user)
         {
-            /* user.Email = username;
-             user.Password = password;
-             user.CitizenCountry = country;
-             user.Name = firstName + " " + lastName;*/
-
-            //user.Name = Request?.Form["name"];
-            return user;
+            /*User user = new User();
+            user.Email = username;
+            user.Password = password;
+            user.CitizenCountry = country;
+            user.Name = firstName + " " + lastName;*/
+            return _service.CreateUser(user).Result;
 
         }
 
