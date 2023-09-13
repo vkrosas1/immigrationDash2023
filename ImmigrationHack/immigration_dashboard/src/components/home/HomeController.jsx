@@ -8,17 +8,16 @@ function HomeController(props) {
     const [errorMessages, setErrorMessages] = useState({});
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [isLogIn, setIsLogIn] = useState(false);
-    const [fname, setFName] = useState(""); 
-    const [email, setEmail] = useState(""); 
-    const [lname, setLName] = useState(""); 
-    const [pass, setPass] = useState(""); 
-    const [repass, setRepass] = useState(""); 
-    const [country, setCountry] = useState(""); 
+    const [fname, setFName] = useState("");
+    const [email, setEmail] = useState("");
+    const [lname, setLName] = useState("");
+    const [pass, setPass] = useState("");
+    const [repass, setRepass] = useState("");
+    const [country, setCountry] = useState("");
 
     const errors = {
         uname: "invalid username or password",
-        repass: "passwords do not match",
-        userex: "user already exists"
+        repass: "passwords do not match"
     };
 
     const handleSubmit = (event) => {
@@ -44,22 +43,19 @@ function HomeController(props) {
                 setErrorMessages({ name: "repass", message: errors.repass });
             }
             else {
-                const newUser = UserService.createUser(email, pass, fname, lname, country);
-                if (!newUser) {
-                    setErrorMessages({ name: "userex", message: errors.userex });
-                }
+                UserService.createUser(email, pass, fname, lname, country);
             }
         }
     };
 
-   // Generate JSX code for error message
+    // Generate JSX code for error message
     function renderErrorMessage(name) {
         return name === errorMessages.name && (
             <div className="error">{errorMessages.message}</div>
         );
     }
 
-    const renderForm =  (
+    const renderForm = (
         <div className="container-login">
             <div style={{ transform: `translate(${isLogIn ? 0 : 300}px, 0px)` }} className="form-div">
                 <form onSubmit={handleSubmit}>
@@ -73,9 +69,9 @@ function HomeController(props) {
                         <div><input placeholder="Re-enter password" type="password" value={repass} onChange={(e) => setRepass(e.target.value)} required />
                             <input placeholder="First Name" type="text" value={fname} onChange={(e) => setFName(e.target.value)} required />
                             <input placeholder="Last Name" type="text" value={lname} onChange={(e) => setLName(e.target.value)} required />
-                            <input placeholder="Country of Citizenship" type="text" value={country} onChange={(e) => setCountry(e.target.value)} required />   </div>  }
+                            <input placeholder="Country of Citizenship" type="text" value={country} onChange={(e) => setCountry(e.target.value)} required />   </div>}
                         {renderErrorMessage("repass")}</div>
-                        <button className="button-primary">Submit</button>
+                    <button className="button-primary">Submit</button>
                 </form>
             </div>
             <div style={{ transform: `translate(${isLogIn ? 0 : -300}px, 0px)` }} className="button-div">

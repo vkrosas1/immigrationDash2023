@@ -3,6 +3,7 @@
 import UserService from "../../api/UserService";
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
+import { useUser } from '../usercontext/UserContext';
 
 function LoginController(props) {
     // React States
@@ -15,6 +16,7 @@ function LoginController(props) {
     const [repass, setRepass] = useState("");
     const [country, setCountry] = useState("");
     const navigate = useNavigate();
+    const { userResult, setUserResult } = useUser();
 
     const errors = {
         uname: "invalid username or password",
@@ -30,6 +32,7 @@ function LoginController(props) {
         if (isLogIn) {
             UserService.authenticateUser(email, pass).then((result) => {
                 result.isSuccessful ? setIsSubmitted(true) : setErrorMessages({ name: "uname", message: errors.uname });
+                setUserResult(result.isSuccessful); // Update the shared state
             });
         }
         else {
