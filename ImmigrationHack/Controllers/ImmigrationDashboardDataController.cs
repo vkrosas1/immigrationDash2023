@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using ImmigrationHack.Services.src;
+﻿using ImmigrationHack.Services.src;
 using ImmigrationHack.Services.src.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 using User = ImmigrationHack.Services.src.Data.Entities.User;
@@ -23,9 +22,9 @@ namespace Immigration_Dashboard_Server.Controllers
         [ActionName("CreateUserAccount")]
         [Consumes("application/json")]
         [Produces("application/json", "application/xml")]
-        public User CreateUserAccount(User user)
+        public Task<ActionResult<User>> CreateUserAccount(User user)
         {
-            return _service.CreateUser(user).Result;
+            return _service.CreateUser(user);
 
         }
 
@@ -34,9 +33,20 @@ namespace Immigration_Dashboard_Server.Controllers
         [ActionName("AuthenticateUser")]
         [Consumes("application/json")]
         [Produces("application/json", "application/xml")]
-        public bool AuthenticateAccount(User user)
+        public Task<ActionResult<bool>> AuthenticateAccount(User user)
         {
             return _service.AuthenticateUser(user.Email, user.Password);
+
+        }
+
+        [HttpGet]
+        [Route("/ImmigrationDashboard/GetUserInfo")]
+        [ActionName("GetUserInfo")]
+        [Consumes("application/json")]
+        [Produces("application/json", "application/xml")]
+        public Task<ActionResult<User>> GetUserInfo(string emailId)
+        {
+            return _service.GetUserByEmail(emailId);
 
         }
 
@@ -45,9 +55,20 @@ namespace Immigration_Dashboard_Server.Controllers
         [ActionName("UploadDocument")]
         [Consumes("application/json")]
         [Produces("application/json", "application/xml")]
-        public UserDocument UploadDocument(UserDocument userDocument)
+        public Task<ActionResult<UserDocument>> UploadDocument(UserDocument userDocument)
         {
-            return _service.UploadDocument(userDocument).Result;
+            return _service.UploadDocument(userDocument);
+
+        }
+
+        [HttpGet]
+        [Route("/ImmigrationDashboard/GetAllDocuments")]
+        [ActionName("GetAllDocuments")]
+        [Consumes("application/json")]
+        [Produces("application/json", "application/xml")]
+        public Task<ActionResult<List<UserDocument>>> GetAllDocuments(Guid userId)
+        {
+            return _service.GetAllDocuments(userId);
 
         }
 
