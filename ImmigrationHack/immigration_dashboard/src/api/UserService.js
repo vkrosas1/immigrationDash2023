@@ -2,11 +2,11 @@ import { BASE_URL } from "../Contstants";
 import Service from "./Axios";
 
 const authenticateUser = async function (email, password) {
-    User['Email'] = email; 
+    User['Email'] = email;
     User['Password'] = password;
     User['Name'] = "";
     return await Service.post(BASE_URL + `/AuthenticateUser`, User, {
-        headers: { 
+        headers: {
             'Accept': 'application/json',
             'Accept- Encoding': 'gzip, deflate, br',
             'Content- Type': 'application / json',
@@ -21,8 +21,10 @@ const getUserID = async function (email) {
     return await userID;
 }
 
-const getUserInfo = async function (userID) {
-    return await Service.post(BASE_URL + `/GetUserInfo`, User, {
+const getUserInfo = async function (email) {
+    return await Service.get(BASE_URL + `/GetUserInfo`, {
+        'EmailId': email
+    }, {
         headers: {
             'Accept': 'application/json',
             'Accept- Encoding': 'gzip, deflate, br',
@@ -46,7 +48,7 @@ const createUser = async function (email, name, password, country) {
 */    return await Service.post(BASE_URL + '/CreateUser', User, {
         headers: {
             'Accept': 'application/json',
-            'Accept- Encoding':'gzip, deflate, br',
+            'Accept- Encoding': 'gzip, deflate, br',
             'Content- Type': 'application / json',
             'Access-Control-Allow-Origin': '*'
         }
@@ -80,7 +82,7 @@ const uploadDocument = async function (formId, status, filename) {
 const UserService = {
     createUser,
     authenticateUser,
-    getUserID, 
+    getUserID,
     getUserInfo,
     getDocuments,
     getUserDocumentForms,
