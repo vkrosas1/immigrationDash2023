@@ -2,7 +2,17 @@ import { BASE_URL } from "../Contstants";
 import Service from "./Axios";
 
 const authenticateUser = async function (email, password) {
-    return await Service.get(`AuthenticateUser`, {email, password}, {});
+    User['Email'] = email; 
+    User['Password'] = password;
+    User['Name'] = "";
+    return await Service.post(BASE_URL + `/AuthenticateUser`, User, {
+        headers: { 
+            'Accept': 'application/json',
+            'Accept- Encoding': 'gzip, deflate, br',
+            'Content- Type': 'application / json',
+            'Access-Control-Allow-Origin': '*'
+        }
+    });
 }
 
 const getUserID = async function (email) {
@@ -12,7 +22,14 @@ const getUserID = async function (email) {
 }
 
 const getUserInfo = async function (userID) {
-    return await Service.get(`GetUserAndPass`, { userID }, {});
+    return await Service.post(BASE_URL + `/GetUserInfo`, User, {
+        headers: {
+            'Accept': 'application/json',
+            'Accept- Encoding': 'gzip, deflate, br',
+            'Content- Type': 'application / json',
+            'Access-Control-Allow-Origin': '*'
+        }
+    });
 }
 
 /*function CreateUUID() {
@@ -25,8 +42,8 @@ const createUser = async function (email, name, password, country) {
     User['Password'] = password;
     User['Name'] = name;
     User['CitizenCountry'] = country;
-    User['Id'] = "61ec4094-53f9-413b-fa76-08dbb3e68305";
-    return await Service.post(BASE_URL + '/CreateUser', User, {
+/*    User['Id'] = "61ec4094-53f9-413b-fa76-08dbb3e68342";
+*/    return await Service.post(BASE_URL + '/CreateUser', User, {
         headers: {
             'Accept': 'application/json',
             'Accept- Encoding':'gzip, deflate, br',

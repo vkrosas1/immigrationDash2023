@@ -85,8 +85,7 @@ function HomeController(props) {
         <div className="app">
             <div className="login-form">
                 <div className="title">Log In</div>
-                {//should go to landing page after user is logged in
-                isSubmitted ? <div>User is successfully logged in</div> : renderForm}
+                Login
             </div>
         </div>
     );
