@@ -1,15 +1,16 @@
 ﻿using ImmigrationHack.Services.src.Data.Entities;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ImmigrationHack.Services.src
 {
     public interface IImmigrationService
     {
-        User GetUserByEmail(string emailId);
-        Task<User> CreateUser(User user);
-        Task<bool> DeleteUser(Guid id);
-        Task<User> UpdateUser(Guid id, User user);
-        Task<User> GetUser(Guid id);
-        Task<UserDocument> UploadDocument(UserDocument req);
-        bool AuthenticateUser(string emailId, string password);
+        Task<ActionResult<User>> GetUserByEmail(string emailId);
+        Task<ActionResult<User>> CreateUser(User user);
+        Task<ActionResult<bool>> DeleteUser(Guid id);
+        Task<ActionResult<User>> UpdateUser(Guid id, User user);
+        Task<ActionResult<User>> GetUser(Guid id);
+        Task<ActionResult<UserDocument>> UploadDocument(UserDocument req);
+        Task<ActionResult<bool>> AuthenticateUser(string emailId, string password);
     }
 }

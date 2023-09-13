@@ -1,6 +1,6 @@
-﻿using AutoMapper;
-using ImmigrationHack.Services.src.Data.Entities;
+﻿using ImmigrationHack.Services.src.Data.Entities;
 using ImmigrationHack.Services.src.Repository;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ImmigrationHack.Services.src
 {
@@ -15,24 +15,42 @@ namespace ImmigrationHack.Services.src
             this.repository = repository;
         }
 
-        public async Task<User> CreateUser(User input)
+        public async Task<ActionResult<User>> CreateUser(User input)
         {
+            var existingUser = repository.GetUserByEmail(input.Email);
+            if(existingUser != null)
+            {
+                return new ObjectResult(new { error = "User Already Exists" }) { StatusCode = 500 };
+            }
             repository.Add(input);
-            await repository.SaveChangesAsync();
-            return input;
+            if (await repository.SaveChangesAsync())
+            {
+                return new ObjectResult(input)
+                {
+                    StatusCode = 200
+                };
+            }
+            return new ObjectResult(new { error = "Unable to create user" })
+            {
+                StatusCode = 500,
+
+            };
         }
 
-        public async Task<User> GetUser(Guid id)
+        public async Task<ActionResult<User>> GetUser(Guid id)
         {
             var user = await repository.GetAsync<User>(id).AsTask();
-            if (user == null)
+            if (user != null)
             {
-                throw new KeyNotFoundException($"Failed to retrieve user id={id}");
+                return new ObjectResult(user)
+                {
+                    StatusCode = 200
+                };
             }
-            return user;
+            return new ObjectResult(new { error = "User Not Found" }) { StatusCode = 404 };
         }
 
-        public async Task<User> UpdateUser(Guid id, User updatedUser)
+        public async Task<ActionResult<User>> UpdateUser(Guid id, User updatedUser)
         {
             var existing = await GetUser(id);
 
@@ -40,42 +58,82 @@ namespace ImmigrationHack.Services.src
             repository.GetEntry(existing);
 
             repository.Update(updatedUser);
-            return updatedUser;
+            if (await repository.SaveChangesAsync())
+            {
+                return new ObjectResult(true)
+                {
+                    StatusCode = 200
+                };
+            }
+            return new ObjectResult(new { error = "Unable to update user" })
+            {
+                StatusCode = 500,
+
+            };
         }
 
-        public async Task<bool> DeleteUser(Guid id)
+        public async Task<ActionResult<bool>> DeleteUser(Guid id)
         {
             var toDelete = await GetUser(id);
             repository.Delete(toDelete);
-            await repository.SaveChangesAsync();
-            return true;
+            if (await repository.SaveChangesAsync())
+            {
+                return new ObjectResult(true)
+                {
+                    StatusCode = 200
+                };
+            }
+            return new ObjectResult(new { error = "Unable to Delete user" })
+            {
+                StatusCode = 500,
+
+            };
         }
 
-        public User GetUserByEmail(string emailId)
+        public async Task<ActionResult<User>> GetUserByEmail(string emailId)
         {
             User user = repository.GetUserByEmail(emailId);
-            if (user == null)
+            if (user != null)
             {
-                throw new KeyNotFoundException($"Failed to retrieve user emailId={emailId}");
+                return new ObjectResult(user)
+                {
+                    StatusCode = 200
+                };
             }
-            return user;
+            return new ObjectResult(new { error = "User Not Found" }) { StatusCode = 404 };
         }
 
-        public async Task<UserDocument> UploadDocument(UserDocument input)
+        public async Task<ActionResult<UserDocument>> UploadDocument(UserDocument input)
         {
             repository.Add(input);
-            await repository.SaveChangesAsync();
-            return input;
+            if(await repository.SaveChangesAsync())
+            {
+                return new ObjectResult(true)
+                {
+                    StatusCode = 200
+                };
+            }
+            return new ObjectResult(new { error = "Unable to Upload Document" })
+            {
+                StatusCode = 500,
+
+            };
+
         }
 
-        public bool AuthenticateUser(string emailId, string password)
+        public async Task<ActionResult<bool>> AuthenticateUser(string emailId, string password)
         {
-            User user = GetUserByEmail(emailId);
-            if (user == null)
+            User user = repository.GetUserByEmail(emailId);
+            if (user != null && user.Password.Equals(password))
             {
-                return false;
+                return new ObjectResult(true)
+                {
+                    StatusCode = 200
+                };
             }
-            return user.Password.Equals(password);
+            return user == null ? 
+                new ObjectResult(new { error = "User doesnt exist" }){StatusCode = 404} :
+                new ObjectResult(new { error = "Wrong password" }) { StatusCode = 401};
         }
     }
 }
