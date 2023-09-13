@@ -89,7 +89,7 @@ namespace ImmigrationHack.Services.src.Repository
 
         public List<UserDocument>? GetUserDocumentsByuserId(Guid userId)
         {
-            return _context.UserDocuments.Where(m => m.UserId == userId).ToList();
+            return _context.UserDocuments.Where(m => m.UserId == userId)?.ToList();
         }
 
         public List<List<Data.Entities.Path>> GetEligiblePaths(Guid userId)
