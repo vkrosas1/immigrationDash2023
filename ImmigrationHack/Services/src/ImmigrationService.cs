@@ -192,6 +192,28 @@ namespace ImmigrationHack.Services.src
             };
         }
 
+        public async Task<ActionResult<Data.Entities.Form>> AddForm(Form form)
+        {
+            var existing = repository.GetPathByName(form.DocumentTypeName);
+            if (existing != null)
+            {
+                return new ObjectResult(new { error = "Path Already Exists" }) { StatusCode = 500 };
+            }
+            repository.Add(form);
+            if (await repository.SaveChangesAsync())
+            {
+                return new ObjectResult(form)
+                {
+                    StatusCode = 200
+                };
+            }
+            return new ObjectResult(new { error = "Unable to create form" })
+            {
+                StatusCode = 500,
+
+            };
+        }
+
         public async Task<ActionResult<DocumentType>> GetDocumentTypeByName(string name)
         {
             var docType =  repository.GetDocumentTypeByName(name);
@@ -203,6 +225,19 @@ namespace ImmigrationHack.Services.src
                 };
             }
             return new ObjectResult(new { error = "User Not Found" }) { StatusCode = 404 };
+        }
+
+        public async Task<ActionResult<List<string>>> GetEligiblePaths(Guid userId)
+        {
+            var paths = repository.GetEligiblePaths(userId);
+            if (paths != null && paths.Count > 0)
+            {
+                return new ObjectResult(paths)
+                {
+                    StatusCode = 200
+                };
+            }
+            return new ObjectResult(new { error = "Eligible Paths Not Found for the User" }) { StatusCode = 404 };
         }
     }
 }

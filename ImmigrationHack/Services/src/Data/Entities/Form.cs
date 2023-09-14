@@ -8,10 +8,10 @@ namespace ImmigrationHack.Services.src.Data.Entities
         [Key]
         public Guid Id { get; set; }
 
-        [ForeignKey("DocumentType")]
-        public Guid DocumentTypeId { get; set; }
-        public DocumentType DocumentType { get; set; }
-        public virtual IEnumerable<Path>? Paths { get; set; }
+        public string DocumentTypeName { get; set; }
+
+        //comma seperated PathNames
+        public string? EligiblePaths { get; set; }
     }
 }
 

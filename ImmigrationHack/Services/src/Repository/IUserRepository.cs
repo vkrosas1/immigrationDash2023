@@ -17,7 +17,7 @@ namespace ImmigrationHack.Services.src.Repository
         List<UserDocument>? GetUserDocumentsByuserId(Guid userId);
         Task<bool> SaveChangesAsync();
         void Update<T>(T entity) where T : class;
-        List<List<Path>> GetEligiblePaths(Guid userId);
+        List<string> GetEligiblePaths(Guid userId);
         DocumentType? GetDocumentTypeByName(string name);
         Path? GetPathByName(string name);
 
