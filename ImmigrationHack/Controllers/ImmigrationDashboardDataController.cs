@@ -95,6 +95,16 @@ namespace Immigration_Dashboard_Server.Controllers
 
         }
 
+        [HttpPost]
+        [Route("/ImmigrationDashboard/AddForm")]
+        [ActionName("AddForm")]
+        [Consumes("application/json")]
+        [Produces("application/json", "application/xml")]
+        public Task<ActionResult<Form>> AddForm(Form form)
+        {
+            return _service.AddForm(form);
+
+        }
 
         [HttpGet]
         [Route("/ImmigrationDashboard/GetDocumentTypeByName")]
@@ -104,6 +114,17 @@ namespace Immigration_Dashboard_Server.Controllers
         public Task<ActionResult<DocumentType>> GetDocumentTypeByName(string name)
         {
             return _service.GetDocumentTypeByName(name);
+
+        }
+
+        [HttpGet]
+        [Route("/ImmigrationDashboard/GetEligiblePaths")]
+        [ActionName("GetEligiblePaths")]
+        [Consumes("application/json")]
+        [Produces("application/json", "application/xml")]
+        public Task<ActionResult<List<string>>> GetEligiblePaths(Guid userId)
+        {
+            return _service.GetEligiblePaths(userId);
 
         }
     }

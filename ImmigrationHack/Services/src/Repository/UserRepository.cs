@@ -1,6 +1,8 @@
 ﻿using ImmigrationHack.Services.src.Data;
 using ImmigrationHack.Services.src.Data.Entities;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Collections.Generic;
 using Path = ImmigrationHack.Services.src.Data.Entities.Path;
 
 namespace ImmigrationHack.Services.src.Repository
@@ -92,63 +94,71 @@ namespace ImmigrationHack.Services.src.Repository
             return _context.UserDocuments.Where(m => m.UserId == userId)?.ToList();
         }
 
-        public List<List<Data.Entities.Path>> GetEligiblePaths(Guid userId)
+        public List<string> GetEligiblePaths(Guid userId)
         {
             var userDocs = GetUserDocumentsByuserId(userId);
-            var availablePaths = new List<List<Data.Entities.Path>>();
+            var availablePaths = new HashSet<string>();
+            if(userDocs == null || userDocs.Count == 0)
+            {
+                return new List<string>();
+            }
             foreach (var userDoc in userDocs)
             {
-                List<List<Data.Entities.Path>> paths = GetPathsForDocType(userDoc.DocumentTypeId);
-                foreach (var path in paths)
+                //adding in set to remove duplicate paths
+                availablePaths.UnionWith(GetEligiblePathsForDocType(userDoc.DocumentTypeId));
+            }
+
+            List<string> sortedPaths = availablePaths.ToList().OrderBy(str => str.Length).ToList();
+            List<string> paths = new List<string>();
+            foreach(var sortedPath in sortedPaths)
+            {
+                bool isShortPathAvailable = false;
+                foreach(var path in paths)
                 {
-                    if (path == null || path.Count == 0 || IsPathAlreadyAdded(path, availablePaths))
+                    /*
+                     * Logic to tackle if paths available are
+                     * p1 = GED,OPT,H1B,GC,C
+                     * p2 = OPT,H1B,GC,C
+                     * only p2 should be eligible path as user already has OPT
+                     */
+                    int index = sortedPath.IndexOf(path);
+                    if(index == -1)
                     {
-                        continue;
+                        isShortPathAvailable = true;
+                        break;
                     }
-                    availablePaths.Add(path);
-                    
+                }
+                if (!isShortPathAvailable)
+                {
+                    paths.Add(sortedPath);
+                }
+            }
+            return paths;
+        }
+
+        private List<string> GetEligiblePathsForDocType(Guid documentTypeId)
+        {
+            var docName = _context.DocumentTypes.Where(m => m.Id == documentTypeId).FirstOrDefault();
+
+            List<string> availablePaths = new List<string>();
+            if (docName == null)
+            {
+               return availablePaths;
+            }
+            List<Form> forms = _context.Forms.Where(f => f.DocumentTypeName.Equals(docName))?.ToList();
+
+            if (forms == null || forms.Count == 0)
+            {
+                return availablePaths;
+            }
+            foreach (var form in forms)
+            {
+                if(form.EligiblePaths != null && form.EligiblePaths.Length > 0)
+                {
+                    availablePaths.Add(form.EligiblePaths);
                 }
             }
             return availablePaths;
-        }
-
-        private bool IsPathAlreadyAdded(List<Path> path, List<List<Path>> availablePaths)
-        {
-            foreach (var availablepath in availablePaths)
-            {
-                if (path[0].Name == availablepath[0].Name)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        private List<List<Data.Entities.Path>> GetPathsForDocType(Guid documentTypeId)
-        {
-            var path = GetAsync<Path>(documentTypeId).Result;
-            List<List<Path>> listOfPaths = new List<List<Path>>();
-            if(path == null || path.NextEligiblePaths?.ToList().Count == 0)
-            {
-                listOfPaths.Add (new List < Path> { path });
-            }
-            else
-            {
-                foreach (var nextEligiblePath in path.NextEligiblePaths)
-                {
-                    var subLists = GetPathsForDocType(path.DocumentTypeId);
-                    foreach (var subList in subLists)
-                    {
-                        if (subList != null && subList.Count > 0)
-                        {
-                            List<Path> listpath = new List<Path>();
-                            listpath.AddRange (subList);
-                            listOfPaths.Add (listpath);
-                        }
-                    }
-                }
-            }
-            return listOfPaths;
         }
 
         public DocumentType? GetDocumentTypeByName(string name)
@@ -158,7 +168,8 @@ namespace ImmigrationHack.Services.src.Repository
 
         public Path? GetPathByName(string name)
         {
-            return _context.Paths.Where(m => m.Name == name).FirstOrDefault();
+            return null;
+            //return _context.Path1s.Where(m => m.Name == name).FirstOrDefault();
         }
     }
 }

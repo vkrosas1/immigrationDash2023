@@ -4,6 +4,7 @@ using ImmigrationHack.Services.src.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ImmigrationHack.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230913233140_InitialCreate_15")]
+    partial class InitialCreate_15
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,14 +46,12 @@ namespace ImmigrationHack.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("DocumentTypeName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EligiblePaths")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("DocumentTypeId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DocumentTypeId");
 
                     b.ToTable("Forms");
                 });
@@ -61,14 +62,26 @@ namespace ImmigrationHack.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("DocumentTypes")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("DocumentTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("FormId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("PathId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("DocumentTypeId");
+
+                    b.HasIndex("FormId");
+
+                    b.HasIndex("PathId");
 
                     b.ToTable("Paths");
                 });
@@ -129,7 +142,70 @@ namespace ImmigrationHack.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DocumentTypeId");
+
+                    b.HasIndex("UserId");
+
                     b.ToTable("UserDocuments");
+                });
+
+            modelBuilder.Entity("ImmigrationHack.Services.src.Data.Entities.Form", b =>
+                {
+                    b.HasOne("ImmigrationHack.Services.src.Data.Entities.DocumentType", "DocumentType")
+                        .WithMany()
+                        .HasForeignKey("DocumentTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DocumentType");
+                });
+
+            modelBuilder.Entity("ImmigrationHack.Services.src.Data.Entities.Path", b =>
+                {
+                    b.HasOne("ImmigrationHack.Services.src.Data.Entities.DocumentType", "DocumentType")
+                        .WithMany()
+                        .HasForeignKey("DocumentTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ImmigrationHack.Services.src.Data.Entities.Form", null)
+                        .WithMany("Paths")
+                        .HasForeignKey("FormId");
+
+                    b.HasOne("ImmigrationHack.Services.src.Data.Entities.Path", null)
+                        .WithMany("NextEligiblePaths")
+                        .HasForeignKey("PathId");
+
+                    b.Navigation("DocumentType");
+                });
+
+            modelBuilder.Entity("ImmigrationHack.Services.src.Data.Entities.UserDocument", b =>
+                {
+                    b.HasOne("ImmigrationHack.Services.src.Data.Entities.DocumentType", "DocumentType")
+                        .WithMany()
+                        .HasForeignKey("DocumentTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ImmigrationHack.Services.src.Data.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DocumentType");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ImmigrationHack.Services.src.Data.Entities.Form", b =>
+                {
+                    b.Navigation("Paths");
+                });
+
+            modelBuilder.Entity("ImmigrationHack.Services.src.Data.Entities.Path", b =>
+                {
+                    b.Navigation("NextEligiblePaths");
                 });
 #pragma warning restore 612, 618
         }
