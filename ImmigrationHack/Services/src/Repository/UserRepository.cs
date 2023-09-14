@@ -119,10 +119,11 @@ namespace ImmigrationHack.Services.src.Repository
                      * Logic to tackle if paths available are
                      * p1 = GED,OPT,H1B,GC,C
                      * p2 = OPT,H1B,GC,C
-                     * only p2 should be eligible path as user already has OPT
+                     * p3 = OPT,GC,C
+                     * only p2 and p3should be eligible path as user already has OPT
                      */
                     int index = sortedPath.IndexOf(path);
-                    if(index == -1)
+                    if(index != -1)
                     {
                         isShortPathAvailable = true;
                         break;
@@ -138,14 +139,14 @@ namespace ImmigrationHack.Services.src.Repository
 
         private List<string> GetEligiblePathsForDocType(Guid documentTypeId)
         {
-            var docName = _context.DocumentTypes.Where(m => m.Id == documentTypeId).FirstOrDefault();
+            var documentType = _context.DocumentTypes.Where(m => m.Id == documentTypeId).FirstOrDefault();
 
             List<string> availablePaths = new List<string>();
-            if (docName == null)
+            if (documentType == null)
             {
                return availablePaths;
             }
-            List<Form> forms = _context.Forms.Where(f => f.DocumentTypeName.Equals(docName))?.ToList();
+            List<Form> forms = _context.Forms.Where(f => f.DocumentTypeName.Equals(documentType.Name))?.ToList();
 
             if (forms == null || forms.Count == 0)
             {
@@ -155,7 +156,7 @@ namespace ImmigrationHack.Services.src.Repository
             {
                 if(form.EligiblePaths != null && form.EligiblePaths.Length > 0)
                 {
-                    availablePaths.Add(form.EligiblePaths);
+                    availablePaths.Add(form.DocumentTypeName + "," + form.EligiblePaths);
                 }
             }
             return availablePaths;
