@@ -1,11 +1,9 @@
 /*import TreeView from "./TreeView";
 */
 import UserService from "../../api/UserService";
-import React, { useState, createContext, useContext } from "react";
+import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../usercontext/UserContext';
-import { UserProvider } from '../usercontext/UserContext'; 
-import { UserContext  } from '../usercontext/UserContext'; 
 
 function LoginController(props) {
     // React States
@@ -18,9 +16,7 @@ function LoginController(props) {
     const [repass, setRepass] = useState("");
     const [country, setCountry] = useState("");
     const navigate = useNavigate();
-    const { value, value2 } = useContext(UserContext);
-    const { userResult, setUserResult } = value;
-    const { userEmail, setUserEmail } = value2;
+    const { userResult, setUserResult } = useUser();
 
     const errors = {
         uname: "invalid username or password",
@@ -32,13 +28,12 @@ function LoginController(props) {
         //Prevent page reload
         event.preventDefault();
 
-
         if (isLogIn) {
             UserService.authenticateUser(email, pass).then((result) => {
                 result.isSuccessful ? setIsSubmitted(true) : setErrorMessages({ name: "uname", message: errors.uname });
-                setUserResult(userResult => result.isSuccessful); // Update the shared state - success login
-                setUserEmail(userEmail => email); // Update the shared state - email
+                setUserResult(result.isSuccessful); // Update the shared state
                 localStorage.setItem('token', result.isSuccessful);
+                localStorage.setItem('email', email);
             });
         }
         else {
@@ -50,6 +45,7 @@ function LoginController(props) {
                     result.isSuccessful ? setIsSubmitted(true) : setErrorMessages({ name: "uname", message: errors.userex });
                     setUserResult(result.isSuccessful); // Update the shared state
                     localStorage.setItem('token', result.isSuccessful);
+                    localStorage.setItem('email', email);
                 });
             }
         }
