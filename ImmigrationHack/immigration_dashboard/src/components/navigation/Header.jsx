@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-function Header() {
+function Header(userResult) {
 
     const headerStyle = {
         textAlign: 'center',
@@ -16,7 +16,29 @@ function Header() {
     return (
         <header style={headerStyle}>
             <h1 className="is-size-1">Immigration Dashboard</h1>
-            <Link style={linkStyle} to="/home">Home</Link> | <Link style={linkStyle} to="/documents">Documents</Link> | <Link style={linkStyle} to="/files">Files</Link> | <Link style={linkStyle} to="/settings">Settings</Link> | <Link style={linkStyle} to="/login">Login</Link>
+            {userResult.userResult ? (
+                <>
+                    <Link style={linkStyle} to="/home">
+                        Home
+                    </Link>{' '}
+                    |{' '}
+                    <Link style={linkStyle} to="/documents">
+                        Documents
+                    </Link>{' '}
+                    |{' '}
+                    <Link style={linkStyle} to="/files">
+                        Files
+                    </Link>{' '}
+                    |{' '}
+                    <Link style={linkStyle} to="/settings">
+                        Settings
+                    </Link>
+                </>
+            ) : (
+                <Link style={linkStyle} to="/login">
+                    Login
+                </Link>
+            )}
         </header>
     );
 }

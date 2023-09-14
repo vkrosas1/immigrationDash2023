@@ -44,8 +44,8 @@ const createUser = async function (email, name, password, country) {
     User['Password'] = password;
     User['Name'] = name;
     User['CitizenCountry'] = country;
-/*    User['Id'] = "61ec4094-53f9-413b-fa76-08dbb3e68342";
-*/    return await Service.post(BASE_URL + '/CreateUser', User, {
+
+    return await Service.post(BASE_URL + '/CreateUser', User, {
         headers: {
             'Accept': 'application/json',
             'Accept- Encoding': 'gzip, deflate, br',

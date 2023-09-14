@@ -29,7 +29,8 @@ function DocumentView(props) {
         }); // testing only
         if (docInfo) { 
         FileService.uploadDocument(expirDate, issueDate, "USA", docInfo.data.id, docInfo.data, user.data.id);
-        setFile(null)
+            setFile(null)
+            setIsSubmitted(true); 
 
         }
         //props.setIsModalOpen(false);
@@ -325,8 +326,7 @@ function DocumentView(props) {
 
     // write a form that will take in the document type, issue date, expiration date, country issued, and comments and save it to the database
 
-    return (
-       
+    const renderForm = (
         <div className="App">
 
             <form className="documentsUpload" onSubmit={handleSubmit}>
@@ -336,7 +336,7 @@ function DocumentView(props) {
                     placeHolder="Select..."
                     options={documentOptions}
                     value={docType}
-                    onChange={(value) => console.log("here is onChange in DocController: "+ value)}
+                    onChange={(value) => console.log("here is onChange in DocController: " + value)}
                     sendToParent={getDocumentType}
                 />
                 <ul>
@@ -348,7 +348,7 @@ function DocumentView(props) {
                         <label for="expirationDate">Expiration date:</label>
                         <input id="dateRequired" type="date" name="dateRequired" defaultValue={date} value={expirDate} onChange={(e) => setExpirDate(e.target.value)} />
                     </li>
-                   {/* <li>
+                    {/* <li>
                         <label for="issueCountry">Country issued:</label>
                         <div className="countryOrigin" value={issueCoun} onChange={(e) => setIssueCoun(e.target.value)}>{getCountry()}</div>
                     </li>*/}
@@ -361,6 +361,13 @@ function DocumentView(props) {
                 </ul>
             </form>
 
+        </div>
+    );
+    return (
+        <div className="documents"> 
+            <div className="documentUpload-form">
+                {setIsSubmitted?<p> you submitted </p> : renderForm}
+            </div>
         </div>
     );
 }
