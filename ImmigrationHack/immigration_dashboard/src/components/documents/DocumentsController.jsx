@@ -1,6 +1,5 @@
 import { useState } from "react";
 import FileService from "../../api/FileService";
-import { STATUSES, TEMP_USER } from "../../Contstants";
 import DocDropdown from "./DocDropdown";
 import UserService from "../../api/UserService";
 
@@ -22,13 +21,11 @@ function DocumentView(props) {
 
         const docInfo = await FileService.getDocumentTypeByName(docType.label).then((result) => {
             return result;
-        }); // testing only
+        }); 
         if (docInfo) {
             await FileService.uploadDocument(expirDate, issueDate, "USA", docInfo.data.id, docInfo.data, user.data.id);
             setIsSubmitted(true);
-
         }
-        //props.setIsModalOpen(false);
 
     }
 
@@ -307,17 +304,10 @@ function DocumentView(props) {
             </select>
         );
     }
-    // set the value to the props
-    // props.setIssueDate(issueDate);
 
-
-    var docmentTypeChosen = '';
     const getDocumentType = (value) => {
-        docmentTypeChosen = value;
-        setDocType(docmentTypeChosen); // save documentTypeChosen to the state of docType 
+        setDocType(value); // save documentTypeChosen to the state of docType 
     }
-
-    // write a form that will take in the document type, issue date, expiration date, country issued, and comments and save it to the database
 
     const renderForm = (
         <div className="App">
