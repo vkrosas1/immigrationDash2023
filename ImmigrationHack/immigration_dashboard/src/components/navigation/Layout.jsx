@@ -1,4 +1,4 @@
-import { Navigate, BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import {Navigate, BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LoginController from '../login/LoginController';
 import HomeController from '../home/HomeController';
 import { useUser } from '../usercontext/UserContext';
@@ -9,24 +9,28 @@ import Header from './Header';
 
 
 function Layout(props) {
+    // App Component
+    // Check if the token exists in localStorage on component mount
+    const token = localStorage.getItem('token');
     const { userResult } = useUser(); 
 
     return (
         <Router>
             <div className="App">
                 <div className="container">
-                    <Header userResult={userResult} class="block" {...props} />
+                    <Header userResult={(userResult || token)} class="block" {...props} />
                     <Routes class="block">
-                        {userResult ? ( // Check if user is authenticated
+                        {(userResult || token) ? ( // Check if user is authenticated
                             <>
-                                <Route exact path="/login" element=<LoginController {...props} />></Route>
                                 <Route exact path="/home" element=<HomeController {...props} />></Route>
                                 <Route exact path="/documents" element=<DocumentsController {...props} />></Route>
-                                <Route exact path="/files" element=<FilesController {...props} />></Route>
                                 <Route exact path="/settings" element=<SettingsController {...props} />></Route>
                             </>
                         ) : (
+                            <>
                             <Route exact path="/login" element=<LoginController {...props} />></Route>
+                                    <Route exact path="/home" element=<LoginController {...props} />></Route>
+                                </>
                         )}
 
                         {/* Redirect to a default route if none of the conditions match */}

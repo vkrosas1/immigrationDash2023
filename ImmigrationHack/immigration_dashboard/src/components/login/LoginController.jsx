@@ -33,6 +33,7 @@ function LoginController(props) {
             UserService.authenticateUser(email, pass).then((result) => {
                 result.isSuccessful ? setIsSubmitted(true) : setErrorMessages({ name: "uname", message: errors.uname });
                 setUserResult(result.isSuccessful); // Update the shared state
+                localStorage.setItem('token', result.isSuccessful);
             });
         }
         else {
@@ -42,6 +43,8 @@ function LoginController(props) {
             else {
                 UserService.createUser(email, fname, pass, country).then((result) => {
                     result.isSuccessful ? setIsSubmitted(true) : setErrorMessages({ name: "uname", message: errors.userex });
+                    setUserResult(result.isSuccessful); // Update the shared state
+                    localStorage.setItem('token', result.isSuccessful);
                 });
             }
         }
@@ -82,7 +85,6 @@ function LoginController(props) {
     return (
         <div className="app">
             <div className="login-form">
-                <div className="title">Log In</div>
                 {//should go to home page after user is logged in
                     isSubmitted ? navigate('/home') : renderForm}
             </div>
