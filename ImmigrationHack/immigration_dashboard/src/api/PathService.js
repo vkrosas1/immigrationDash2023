@@ -1,5 +1,33 @@
 import Service from "./Axios";
+import { BASE_URL } from "../Contstants";
 
+const getEligiblePaths = async function (userId) {
+   /* const userID = Service.get(`GetEligiblePaths`, { userId }, {});
+    Path['userID'] = userID;
+    return await userID;*/
+    return await Service.get(BASE_URL + `/GetEligiblePaths`, {
+        'UserId': userId
+    }, {
+        headers: {
+            'Accept': 'application/json',
+            'Accept- Encoding': 'gzip, deflate, br',
+            'Content- Type': 'application / json',
+            'Access-Control-Allow-Origin': '*'
+        }
+    });
+}
+/*const getUserInfo = async function (email) {
+    return await Service.get(BASE_URL + `/GetUserInfo`, {
+        'EmailId': email
+    }, {
+        headers: {
+            'Accept': 'application/json',
+            'Accept- Encoding': 'gzip, deflate, br',
+            'Content- Type': 'application / json',
+            'Access-Control-Allow-Origin': '*'
+        }
+    });
+}*/
 const getPath = async function (pathId) {
     return await Service.get(`GetPath`, { pathId }, {});
 }
@@ -40,9 +68,9 @@ const getPathsTemp = async function (pathIds, forms) {
 }
 
 const PathService = {
-    getPath,
-    getPaths,
-    getPathsTemp
+    getEligiblePaths
 }
+
+const Path = {}
 
 export default PathService;

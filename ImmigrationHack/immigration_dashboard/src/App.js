@@ -34,14 +34,14 @@ function App() {
         }
 
         // const paths = await PathService.getPaths(tempUser.paths, forms)
-        const paths = await PathService.getPathsTemp(tempUser.paths, forms)
+    /*    const paths = await PathService.getPathsTemp(tempUser.paths, forms)
         setState({
             ...state,
             forms: forms,
             paths: new Map(paths.map((path) => [path.id, path])),
             user: tempUser,
             isLoading: false
-        })
+        })*/
     }
 
     useEffect(() => {
@@ -53,7 +53,7 @@ function App() {
         setState
     }
 
-    return state.isLoading ? <div><progress className="progress"></progress></div> : <Layout {...props} />
+    return <Layout {...props} />
 
 }
 

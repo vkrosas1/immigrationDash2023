@@ -29,7 +29,7 @@ function DocumentView(props) {
                 return result;
             }); // testing only
             if (docInfo) {
-                await FileService.uploadDocument(expirDate, issueDate, "USA", docInfo.data.id, docInfo.data, user.data.id);
+                await FileService.uploadDocument(expirDate, issueDate, issueCoun, docInfo.data.id, docInfo.data, user.data.id);
                 setIsSubmitted(true);
             }
         }
@@ -44,14 +44,10 @@ function DocumentView(props) {
 
     const documentOptions = [
         { value: "birth certificate", label: "Birth Certificate" },
+        { value: "ged", label: "GED" },
+        { value: "h1b", label: "H1B" },
         { value: "high school diploma", label: "High School Diploma" },
-        { value: "permanent residency card", label: "Permanent Residency Card" },
-        { value: "n-400", label: "N-400" },
-        { value: "marriage license", label: "Marriage License" },
-        { value: "passport", label: "Passport" },
-        { value: "g1450", label: "G-1450" },
-        { value: "g28", label: "G-28" },
-        { value: "ged", label: "GED" }
+        { value: "green card", label: "Green Card" }
     ];
 
     var curr = new Date();
