@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+import { useUser } from '../usercontext/UserContext';
 
 function Header(userResult) {
 
@@ -13,6 +15,16 @@ function Header(userResult) {
         textDecoration: 'none'
     }
 
+    const navigate = useNavigate();
+    const { userR, setUserResult } = useUser();
+
+    const handleLogout = () => {
+        // Clear the authentication token (e.g., from localStorage or cookies)
+        localStorage.removeItem('token'); // Replace with your token storage method
+        setUserResult(false);
+        navigate('/login');
+    };
+
     return (
         <header style={headerStyle}>
             <h1 className="is-size-1">Immigration Dashboard</h1>
@@ -26,19 +38,15 @@ function Header(userResult) {
                         Documents
                     </Link>{' '}
                     |{' '}
-                    <Link style={linkStyle} to="/files">
-                        Files
-                    </Link>{' '}
-                    |{' '}
                     <Link style={linkStyle} to="/settings">
                         Settings
+                    </Link>{' '}
+                    |{' '}
+                    <Link style={linkStyle} onClick={handleLogout} to="/login">
+                        Logout
                     </Link>
                 </>
-            ) : (
-                <Link style={linkStyle} to="/login">
-                    Login
-                </Link>
-            )}
+            ) : ''}
         </header>
     );
 }
