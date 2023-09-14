@@ -2,44 +2,34 @@ import { useState } from "react";
 import FileService from "../../api/FileService";
 import { STATUSES, TEMP_USER } from "../../Contstants";
 import DocDropdown from "./DocDropdown";
+import UserService from "../../api/UserService";
 
 function DocumentView(props) {
 
-    const [file, setFile] = useState(null);
-    const [imgSrc, setImgSrc] = useState("https://bulma.io/images/placeholders/320x480.png")
-    // const [isLoading, setIsLoading] = useState(true);
-    // const [isError, setIsError] = useState(false);
+    const [errorMessages, setErrorMessages] = useState({});
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    const [expirDate, setExpirDate] = useState('');
+    const [issueDate, setIssueDate] = useState('');
+    const [issueCoun, setIssueCoun] = useState("");
+    const [docType, setDocType] = useState("");
 
-    // useEffect(() => {
-    //   async function getDocumentForm() {
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const user = await UserService.getUserInfo("viv1@gmail.com").then((result) => {
+            //console.log(result);
+            return result;
+        });
 
-    //   }
-    //   getDocumentForm();
-    // }, [])
+        const docInfo = await FileService.getDocumentTypeByName(docType.label).then((result) => {
+            return result;
+        }); // testing only
+        if (docInfo) {
+            await FileService.uploadDocument(expirDate, issueDate, "USA", docInfo.data.id, docInfo.data, user.data.id);
+            setIsSubmitted(true);
 
-    const onChange = (event) => {
-        if (event.target.files && event.target.files.length) {
-            setFile(event.target.files[0]);
-        } else {
-            setFile(null);
         }
-    }
+        //props.setIsModalOpen(false);
 
-    const onClose = (event) => {
-        setFile(null);
-        props.setIsModalOpen(false);
-    }
-
-    const onUpload = async (event) => {
-        const result = await FileService.uploadDocument(TEMP_USER.id, props.selectedDocumentForm.formId, STATUSES.IN_PROGRESS.key, file.name, file);
-        setFile(null)
-        props.setIsModalOpen(false);
-    }
-
-    const onSubmit = async (event) => {
-        const result = await FileService.uploadDocument(TEMP_USER.id, props.selectedDocumentForm.formId, STATUSES.IN_PROGRESS.key, file.name, file);
-        setFile(null)
-        props.setIsModalOpen(false);
     }
 
     const documentOptions = [
@@ -50,7 +40,8 @@ function DocumentView(props) {
         { value: "marriage license", label: "Marriage License" },
         { value: "passport", label: "Passport" },
         { value: "g1450", label: "G-1450" },
-        { value: "g28", label: "G-28" }
+        { value: "g28", label: "G-28" },
+        { value: "ged", label: "GED" }
     ];
 
     var curr = new Date();
@@ -316,40 +307,61 @@ function DocumentView(props) {
             </select>
         );
     }
+    // set the value to the props
+    // props.setIssueDate(issueDate);
 
-    return (
+
+    var docmentTypeChosen = '';
+    const getDocumentType = (value) => {
+        docmentTypeChosen = value;
+        setDocType(docmentTypeChosen); // save documentTypeChosen to the state of docType 
+    }
+
+    // write a form that will take in the document type, issue date, expiration date, country issued, and comments and save it to the database
+
+    const renderForm = (
         <div className="App">
 
-            <form action={onSubmit()} method="post" className="documentsUpload">
+            <form onSubmit={handleSubmit}>
                 <DocDropdown
                     isSearchable
                     isMulti
                     placeHolder="Select..."
                     options={documentOptions}
-                    onChange={(value) => console.log(value)}
+                    value={docType}
+                    onChange={(value) => console.log("here is onChange in DocController: " + value)}
+                    sendToParent={getDocumentType}
+                    hasBeenSubmitted={isSubmitted}
                 />
                 <ul>
                     <li>
                         <label for="issueDate">Issued date:</label>
-                        <input id="dateRequired" type="date" name="dateRequired" defaultValue={date} />
+                        <input id="dateRequired" type="date" name="dateRequired" defaultValue={date} value={issueDate} onChange={(e) => setIssueDate(e.target.value)} />
                     </li>
                     <li>
                         <label for="expirationDate">Expiration date:</label>
-                        <input id="dateRequired" type="date" name="dateRequired" defaultValue={date} />
+                        <input id="dateRequired" type="date" name="dateRequired" defaultValue={date} value={expirDate} onChange={(e) => setExpirDate(e.target.value)} />
                     </li>
-                    <li>
+                     <li>
                         <label for="issueCountry">Country issued:</label>
-                        <div className="countryOrigin">{getCountry()}</div>
+                        <div className="countryOrigin" value={issueCoun} onChange={(e) => setIssueCoun(e.target.value)}>{getCountry()}</div>
                     </li>
                     <li>
                         <label for="msg">Comments</label>
                         <textarea id="msg" name="user_message"></textarea>
                     </li>
 
-                    <button type="submit">Upload</button>
+                    <button >Upload</button>
                 </ul>
             </form>
 
+        </div>
+    );
+    return (
+        <div className="documents">
+            <div className="documentUpload-form">
+                {renderForm}
+            </div>
         </div>
     );
 }

@@ -30,7 +30,13 @@ const post = async function (url, body, headers) {
 }
 
 const postFormData = async function (url, formData, headers) {
-    const response = axios.post(BASE_URL+"/"+url, formData, { headers });
+    const response = axios.post(BASE_URL + "/" + url, formData, {
+        headers: {
+            'content-type': 'application/json',
+            'charset': 'utf-8',
+            ...headers
+        }
+});
     return await handleResponse(response);
 }
 
