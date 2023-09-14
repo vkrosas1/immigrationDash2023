@@ -6,8 +6,6 @@ import UserService from "../../api/UserService";
 
 function DocumentView(props) {
 
-    const [file, setFile] = useState(null);
-    const [imgSrc, setImgSrc] = useState("https://bulma.io/images/placeholders/320x480.png")
     const [errorMessages, setErrorMessages] = useState({});
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [expirDate, setExpirDate] = useState('');
@@ -15,22 +13,19 @@ function DocumentView(props) {
     const [issueCoun, setIssueCoun] = useState("");
     const [docType, setDocType] = useState("");
 
-    const handleSubmit = (event) => {
-        console.log('went in here');
-        const user = UserService.getUserInfo("viv1@gmail.com").then((result) => {
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const user = await UserService.getUserInfo("viv1@gmail.com").then((result) => {
             //console.log(result);
             return result;
         });
-      
-        const docInfo = FileService.getDocumentTypeByName(docType).then((result) => {
-          /*  console.log("this is in docType"); 
-            console.log(result);*/
+
+        const docInfo = await FileService.getDocumentTypeByName(docType.label).then((result) => {
             return result;
         }); // testing only
-        if (docInfo) { 
-        FileService.uploadDocument(expirDate, issueDate, "USA", docInfo.data.id, docInfo.data, user.data.id);
-            setFile(null)
-            setIsSubmitted(true); 
+        if (docInfo) {
+            await FileService.uploadDocument(expirDate, issueDate, "USA", docInfo.data.id, docInfo.data, user.data.id);
+            setIsSubmitted(true);
 
         }
         //props.setIsModalOpen(false);
@@ -45,7 +40,8 @@ function DocumentView(props) {
         { value: "marriage license", label: "Marriage License" },
         { value: "passport", label: "Passport" },
         { value: "g1450", label: "G-1450" },
-        { value: "g28", label: "G-28" }
+        { value: "g28", label: "G-28" },
+        { value: "ged", label: "GED" }
     ];
 
     var curr = new Date();
@@ -315,13 +311,10 @@ function DocumentView(props) {
     // props.setIssueDate(issueDate);
 
 
-    var docmentTypeChosen = ''; 
-    const getDocumentType = (value) => { 
-        docmentTypeChosen = value; 
-        // save documentTypeChosen to the state of docType 
-        console.log("this is trying to get value back form child in documents controller"); 
-        console.log(value); 
-        setDocType(docmentTypeChosen);
+    var docmentTypeChosen = '';
+    const getDocumentType = (value) => {
+        docmentTypeChosen = value;
+        setDocType(docmentTypeChosen); // save documentTypeChosen to the state of docType 
     }
 
     // write a form that will take in the document type, issue date, expiration date, country issued, and comments and save it to the database
@@ -329,7 +322,7 @@ function DocumentView(props) {
     const renderForm = (
         <div className="App">
 
-            <form className="documentsUpload" onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit}>
                 <DocDropdown
                     isSearchable
                     isMulti
@@ -338,6 +331,7 @@ function DocumentView(props) {
                     value={docType}
                     onChange={(value) => console.log("here is onChange in DocController: " + value)}
                     sendToParent={getDocumentType}
+                    hasBeenSubmitted={isSubmitted}
                 />
                 <ul>
                     <li>
@@ -348,25 +342,25 @@ function DocumentView(props) {
                         <label for="expirationDate">Expiration date:</label>
                         <input id="dateRequired" type="date" name="dateRequired" defaultValue={date} value={expirDate} onChange={(e) => setExpirDate(e.target.value)} />
                     </li>
-                    {/* <li>
+                     <li>
                         <label for="issueCountry">Country issued:</label>
                         <div className="countryOrigin" value={issueCoun} onChange={(e) => setIssueCoun(e.target.value)}>{getCountry()}</div>
-                    </li>*/}
+                    </li>
                     <li>
                         <label for="msg">Comments</label>
                         <textarea id="msg" name="user_message"></textarea>
                     </li>
 
-                    <button type="submit">Upload</button>
+                    <button >Upload</button>
                 </ul>
             </form>
 
         </div>
     );
     return (
-        <div className="documents"> 
+        <div className="documents">
             <div className="documentUpload-form">
-                {setIsSubmitted?<p> you submitted </p> : renderForm}
+                {renderForm}
             </div>
         </div>
     );

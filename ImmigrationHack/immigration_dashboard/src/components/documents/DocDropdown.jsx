@@ -54,7 +54,7 @@ function Dropdown(props) {
     };
 
     const getDisplay = () => {
-        if (!selectedValue || selectedValue.length === 0) {
+        if (!selectedValue || selectedValue.length === 0 || props.hasBeenSubmitted) {
             return props.placeHolder;
         }
         return selectedValue.label;
