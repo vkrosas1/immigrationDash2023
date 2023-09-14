@@ -10,51 +10,28 @@ function DocumentView(props) {
     const [imgSrc, setImgSrc] = useState("https://bulma.io/images/placeholders/320x480.png")
     const [errorMessages, setErrorMessages] = useState({});
     const [isSubmitted, setIsSubmitted] = useState(false);
-    const [expirDate, setExpirDate] = useState(null);
-    const [issueDate, setIssueDate] = useState(null);
+    const [expirDate, setExpirDate] = useState('');
+    const [issueDate, setIssueDate] = useState('');
     const [issueCoun, setIssueCoun] = useState("");
-    const [docType, setDocType] = useState(null);
+    const [docType, setDocType] = useState("");
 
-   
-    //props.hi = "hi";
-   
-    props = {
-        ...props,
-        docType,
-        setDocType,
-    }
-    console.log(props);
-   /* const onChange = (event) => {
-        if (event.target.files && event.target.files.length) {
-            setFile(event.target.files[0]);
-        } else {
-            setFile(null);
-        }
-    }*/
-
-  /*  const onClose = (event) => {
-        setFile(null);
-        props.setIsModalOpen(false);
-    }*/
-
-   /* const onUpload = async (event) => {
-        const result = await FileService.uploadDocument(TEMP_USER.id, props.selectedDocumentForm.formId, STATUSES.IN_PROGRESS.key, file.name, file);
-        setFile(null)
-        props.setIsModalOpen(false);
-    }*/
-
-    const onSubmit = async (event) => {
-        const user = await UserService.getUserInfo("viv1@gmail.com").then((result) => {
-            console.log(result);
+    const handleSubmit = (event) => {
+        console.log('went in here');
+        const user = UserService.getUserInfo("viv1@gmail.com").then((result) => {
+            //console.log(result);
             return result;
         });
-
-        const docType = await FileService.getDocumentTypeByName("Birth Certificate").then((result) => {
-            console.log(result);
+      
+        const docInfo = FileService.getDocumentTypeByName(docType).then((result) => {
+          /*  console.log("this is in docType"); 
+            console.log(result);*/
             return result;
         }); // testing only
-        FileService.uploadDocument(expirDate, issueDate, issueCoun, docType.data.id, docType.data, user.data.id);
+        if (docInfo) { 
+        FileService.uploadDocument(expirDate, issueDate, "USA", docInfo.data.id, docInfo.data, user.data.id);
         setFile(null)
+
+        }
         //props.setIsModalOpen(false);
 
     }
@@ -333,29 +310,34 @@ function DocumentView(props) {
             </select>
         );
     }
-    // set the value to the props 
+    // set the value to the props
     // props.setIssueDate(issueDate);
 
-    // Callback function to handle data received from the
-    //child component
-  /*  const handleCallback = (childData) => {
-        // Update the name in the component's state
-        this.setState({ docType: childData })
-    }*/
+
+    var docmentTypeChosen = ''; 
+    const getDocumentType = (value) => { 
+        docmentTypeChosen = value; 
+        // save documentTypeChosen to the state of docType 
+        console.log("this is trying to get value back form child in documents controller"); 
+        console.log(value); 
+        setDocType(docmentTypeChosen);
+    }
+
+    // write a form that will take in the document type, issue date, expiration date, country issued, and comments and save it to the database
 
     return (
        
         <div className="App">
 
-            <form method="post" className="documentsUpload">
+            <form className="documentsUpload" onSubmit={handleSubmit}>
                 <DocDropdown
                     isSearchable
                     isMulti
                     placeHolder="Select..."
                     options={documentOptions}
                     value={docType}
-                    onChange={(value) => console.log(value)}
-                    parentCallback={(value) => this.setState({docType: value})}
+                    onChange={(value) => console.log("here is onChange in DocController: "+ value)}
+                    sendToParent={getDocumentType}
                 />
                 <ul>
                     <li>
@@ -375,7 +357,7 @@ function DocumentView(props) {
                         <textarea id="msg" name="user_message"></textarea>
                     </li>
 
-                    <button type="submit" action={onSubmit()}>Upload</button>
+                    <button type="submit">Upload</button>
                 </ul>
             </form>
 

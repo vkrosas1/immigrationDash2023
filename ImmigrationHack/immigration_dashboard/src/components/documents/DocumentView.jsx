@@ -1,4 +1,4 @@
-import { STATUSES } from "../../Contstants";
+/*import { STATUSES } from "../../Contstants";
 function DocumentsList(props) {
 
     const generateOnClick = function (documentForm) {
@@ -25,4 +25,4 @@ function DocumentsList(props) {
     );
 }
 
-export default DocumentsList;
+export default DocumentsList;*/
