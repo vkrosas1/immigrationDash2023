@@ -23,7 +23,7 @@ const Dropdown = ({
     isMulti,
     isSearchable,
     onChange
-}) => {
+}, props) => {
     const [showMenu, setShowMenu] = useState(false);
     const [selectedValue, setSelectedValue] = useState(isMulti ? [] : null);
     const [searchValue, setSearchValue] = useState("");
@@ -87,7 +87,9 @@ const Dropdown = ({
         setSelectedValue(newValue);
         onChange(newValue);
     };
-
+    props = {
+        ...props, selectedValue
+    }
     const onItemClick = (option) => {
         let newValue;
         if (isMulti) {
@@ -101,6 +103,7 @@ const Dropdown = ({
         }
         setSelectedValue(newValue);
         onChange(newValue);
+        this.props.parentCallback(newValue);
     };
 
     const isSelected = (option) => {
@@ -129,6 +132,12 @@ const Dropdown = ({
                 option.label.toLowerCase().indexOf(searchValue.toLowerCase()) >= 0
         );
     };
+
+    const onTrigger = (event) => {
+        // Call the parent callback function
+        this.props.parentCallback(event.target.myname.value);
+        event.preventDefault();
+    }
 
     return (
         <div className="dropdown-container">

@@ -16,7 +16,14 @@ function DocumentView(props) {
     const [docType, setDocType] = useState(null);
 
    
-
+    //props.hi = "hi";
+   
+    props = {
+        ...props,
+        docType,
+        setDocType,
+    }
+    console.log(props);
    /* const onChange = (event) => {
         if (event.target.files && event.target.files.length) {
             setFile(event.target.files[0]);
@@ -42,11 +49,11 @@ function DocumentView(props) {
             return result;
         });
 
-        const docType = await FileService.addDocumentType("Birth Certificate").then((result) => {
+        const docType = await FileService.getDocumentTypeByName("Birth Certificate").then((result) => {
             console.log(result);
             return result;
         }); // testing only
-        FileService.uploadDocument(expirDate, issueDate, issueCoun, docType, user.id);
+        FileService.uploadDocument(expirDate, issueDate, issueCoun, docType.data.id, docType.data, user.data.id);
         setFile(null)
         //props.setIsModalOpen(false);
 
@@ -326,8 +333,18 @@ function DocumentView(props) {
             </select>
         );
     }
+    // set the value to the props 
+    // props.setIssueDate(issueDate);
+
+    // Callback function to handle data received from the
+    //child component
+  /*  const handleCallback = (childData) => {
+        // Update the name in the component's state
+        this.setState({ docType: childData })
+    }*/
 
     return (
+       
         <div className="App">
 
             <form method="post" className="documentsUpload">
@@ -337,7 +354,8 @@ function DocumentView(props) {
                     placeHolder="Select..."
                     options={documentOptions}
                     value={docType}
-                    
+                    onChange={(value) => console.log(value)}
+                    parentCallback={(value) => this.setState({docType: value})}
                 />
                 <ul>
                     <li>
