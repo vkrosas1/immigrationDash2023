@@ -16,7 +16,7 @@ function HomeController(props) {
             console.log(getUserInfo);
             const paths = await PathService.getEligiblePaths(getUserInfo.data.id);
             console.log("got here");
-            setValidPaths(paths.data[0]);
+            setValidPaths(paths.data);
             if (paths.data[0]) {
                 return "yay got paths";
 
@@ -25,13 +25,13 @@ function HomeController(props) {
         }; getPaths();
     }, []);
 
-    /*useEffect(() => {
+    useEffect(() => {
         const getAllDocs = async () => {
             const getUserInfo = await UserService.getUserInfo(localStorage.getItem('email'));
             console.log(getUserInfo);
             const paths = await PathService.getAllUserDocs(getUserInfo.data.id);
             console.log("got here");
-            setAllDocs(paths.data[0]);
+            setAllDocs(JSON.stringify(paths.data[0]));
             if (paths.data[0]) {
                 return "yay got paths";
 
@@ -39,7 +39,7 @@ function HomeController(props) {
             return "You haven't added any documents yet";
         }; getAllDocs();
     }, []);
-*/
+
 
 
    
@@ -56,7 +56,7 @@ function HomeController(props) {
         <div className="app">
             <div className="login-form">
                 <div className="title">{validPaths}</div>
-                {/*<div className="title">{allDocs}</div>*/}
+                <div className="title">{allDocs}</div>
                 
             </div>
         </div>
