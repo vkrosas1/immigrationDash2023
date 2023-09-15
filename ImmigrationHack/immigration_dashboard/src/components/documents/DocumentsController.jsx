@@ -21,7 +21,6 @@ function DocumentView(props) {
         if (docType && issueCoun) {
             const email = localStorage.getItem('email');
             const user = await UserService.getUserInfo(email).then((result) => {
-                //console.log(result);
                 return result;
             });
 
@@ -29,28 +28,26 @@ function DocumentView(props) {
                 return result;
             }); // testing only
             if (docInfo) {
-                await FileService.uploadDocument(expirDate, issueDate, "USA", docInfo.data.id, docInfo.data, user.data.id);
-                setIsSubmitted(true);
+                await FileService.uploadDocument(expirDate, issueDate, issueCoun, docInfo.data.id, docInfo.data, user.data.id).then((result) => {
+                    result.isSuccessful ? setIsSubmitted(true) : setErrorMessages({ name: "submit", message: errors.submit });
+                });
+            }
+        } else {
+            if (!docType) {
+                setErrorMessages({ name: "dropdown", message: errors.dropdown });
+            }
+            if (!issueCoun) {
+                setErrorMessages({ name: "country", message: errors.country });
             }
         }
-        else if (!docType) {
-            setErrorMessages({ name: "dropdown", message: errors.dropdown });
-        }
-        else {
-            setErrorMessages({ name: "country", message: errors.country });
-        }
-
-    }
+    };
 
     const documentOptions = [
         { value: "birth certificate", label: "Birth Certificate" },
-        { value: "high school diploma", label: "High School Diploma" },
-        { value: "permanent residency card", label: "Permanent Residency Card" },
-        { value: "n-400", label: "N-400" },
-        { value: "marriage license", label: "Marriage License" },
-        { value: "passport", label: "Passport" },
-        { value: "g1450", label: "G-1450" },
-        { value: "g28", label: "G-28" },
+        { value: "Green Card", label: "Green Card" },
+        { value: "H4B", label: "H4B" },
+        { value: "H1B", label: "H1B" },
+        { value: "opt", label: "OPT" },
         { value: "ged", label: "GED" }
     ];
 
@@ -61,11 +58,8 @@ function DocumentView(props) {
     // set the value to the props
     // props.setIssueDate(issueDate);
 
-
-    var docmentTypeChosen = '';
     const getDocumentType = (value) => {
-        docmentTypeChosen = value;
-        setDocType(docmentTypeChosen); // save documentTypeChosen to the state of docType 
+        setDocType(value); // save documentTypeChosen to the state of docType 
     }
 
     // Generate JSX code for error message
@@ -77,7 +71,8 @@ function DocumentView(props) {
 
     const errors = {
         dropdown: "Please select document name.",
-        country: "Please select country"
+        country: "Please select country",
+        submit: "Failed to submit document"
     };
 
     // write a form that will take in the document type, issue date, expiration date, country issued, and comments and save it to the database
@@ -118,7 +113,10 @@ function DocumentView(props) {
                         <label for="msg">Comments</label>
                         <textarea id="msg" name="user_message"></textarea>
                     </li>
+                    <div>
                     <button>Submit</button>
+                        {renderErrorMessage("submit")}
+                    </div>
                 </ul>
             </form>
 
