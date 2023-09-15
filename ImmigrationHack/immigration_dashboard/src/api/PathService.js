@@ -16,6 +16,22 @@ const getEligiblePaths = async function (userId) {
         }
     });
 }
+
+const getAllUserDocs = async function (userId) {
+   /* const userID = Service.get(`GetEligiblePaths`, { userId }, {});
+    Path['userID'] = userID;
+    return await userID;*/
+    return await Service.get(BASE_URL + `/GetAllDocuments`, {
+        'UserId': userId
+    }, {
+        headers: {
+            'Accept': 'application/json',
+            'Accept- Encoding': 'gzip, deflate, br',
+            'Content- Type': 'application / json',
+            'Access-Control-Allow-Origin': '*'
+        }
+    });
+}
 /*const getUserInfo = async function (email) {
     return await Service.get(BASE_URL + `/GetUserInfo`, {
         'EmailId': email
@@ -68,7 +84,8 @@ const getPathsTemp = async function (pathIds, forms) {
 }
 
 const PathService = {
-    getEligiblePaths
+    getEligiblePaths,
+    getAllUserDocs
 }
 
 const Path = {}

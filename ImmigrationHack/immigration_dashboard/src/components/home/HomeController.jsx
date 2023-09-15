@@ -8,6 +8,8 @@ import React, { useState } from "react";
 function HomeController(props) {
     // React States
     const [validPaths, setValidPaths] = useState([]);
+    const [allDocs, setAllDocs] = useState([]);
+
     useEffect(() => {
         const getPaths = async () => {
             const getUserInfo = await UserService.getUserInfo(localStorage.getItem('email'));
@@ -23,6 +25,23 @@ function HomeController(props) {
         }; getPaths();
     }, []);
 
+    /*useEffect(() => {
+        const getAllDocs = async () => {
+            const getUserInfo = await UserService.getUserInfo(localStorage.getItem('email'));
+            console.log(getUserInfo);
+            const paths = await PathService.getAllUserDocs(getUserInfo.data.id);
+            console.log("got here");
+            setAllDocs(paths.data[0]);
+            if (paths.data[0]) {
+                return "yay got paths";
+
+            }
+            return "You haven't added any documents yet";
+        }; getAllDocs();
+    }, []);
+*/
+
+
    
    /* const getDisplay = () => {
         if (!selectedValue || selectedValue.length === 0 || props.hasBeenSubmitted) {
@@ -37,6 +56,7 @@ function HomeController(props) {
         <div className="app">
             <div className="login-form">
                 <div className="title">{validPaths}</div>
+                {/*<div className="title">{allDocs}</div>*/}
                 
             </div>
         </div>
