@@ -3,6 +3,7 @@ using ImmigrationHack.Services.src.Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 using User = ImmigrationHack.Services.src.Data.Entities.User;
 using Path = ImmigrationHack.Services.src.Data.Entities.Path;
+using ImmigrationHack.Services.src.Data.DataTransferObjects;
 
 namespace Immigration_Dashboard_Server.Controllers
 {
@@ -26,7 +27,26 @@ namespace Immigration_Dashboard_Server.Controllers
         public Task<ActionResult<User>> CreateUserAccount(User user)
         {
             return _service.CreateUser(user);
+        }
 
+        [HttpPut]
+        [Route("/ImmigrationDashboard/User/{userId:guid}")]
+        [ActionName("UpdateUserAccount")]
+        [Consumes("application/json")]
+        [Produces("application/json", "application/xml")]
+        public Task<ActionResult<User>> UpdateUserAccount(Guid userId, User user)
+        {
+            return _service.UpdateUser(userId,user);
+        }
+
+        [HttpDelete]
+        [Route("/ImmigrationDashboard/User/{userId:guid}")]
+        [ActionName("DeleteUserAccount")]
+        [Consumes("application/json")]
+        [Produces("application/json", "application/xml")]
+        public Task<ActionResult<bool>> DeleteUserAccount(Guid userId)
+        {
+            return _service.DeleteUser(userId);
         }
 
         [HttpPost]
@@ -37,7 +57,6 @@ namespace Immigration_Dashboard_Server.Controllers
         public Task<ActionResult<bool>> AuthenticateAccount(User user)
         {
             return _service.AuthenticateUser(user.Email, user.Password);
-
         }
 
         [HttpGet]
@@ -59,7 +78,26 @@ namespace Immigration_Dashboard_Server.Controllers
         public Task<ActionResult<UserDocument>> UploadDocument(UserDocument userDocument)
         {
             return _service.UploadDocument(userDocument);
+        }
 
+        [HttpPut]
+        [Route("/ImmigrationDashboard/UserDocument/{userDocumentId:guid}")]
+        [ActionName("UpdateUserDocument")]
+        [Consumes("application/json")]
+        [Produces("application/json", "application/xml")]
+        public Task<ActionResult<UserDocument>> UpdateUserDocument(Guid userDocumentId, UserDocument userDocument)
+        {
+            return _service.UpdateUserDocument(userDocumentId, userDocument);
+        }
+
+        [HttpDelete]
+        [Route("/ImmigrationDashboard/UserDocument/{userDocumentId:guid}")]
+        [ActionName("DeleteUserDocument")]
+        [Consumes("application/json")]
+        [Produces("application/json", "application/xml")]
+        public Task<ActionResult<bool>> DeleteUserDocument(Guid userDocumentId)
+        {
+            return _service.DeleteUser(userDocumentId);
         }
 
         [HttpGet]
@@ -67,10 +105,9 @@ namespace Immigration_Dashboard_Server.Controllers
         [ActionName("GetAllDocuments")]
         [Consumes("application/json")]
         [Produces("application/json", "application/xml")]
-        public Task<ActionResult<List<UserDocument>>> GetAllDocuments(Guid userId)
+        public Task<ActionResult<List<UserDocumentResponse>>> GetAllDocuments(Guid userId)
         {
             return _service.GetAllDocuments(userId);
-
         }
 
         [HttpPost]
@@ -81,7 +118,6 @@ namespace Immigration_Dashboard_Server.Controllers
         public Task<ActionResult<DocumentType>> AddDocumentType(DocumentType documentType)
         {
             return _service.AddDocumentType(documentType);
-
         }
 
         [HttpPost]
@@ -92,7 +128,6 @@ namespace Immigration_Dashboard_Server.Controllers
         public Task<ActionResult<Path>> AddPath(Path path)
         {
             return _service.AddPath(path);
-
         }
 
         [HttpPost]
@@ -125,7 +160,16 @@ namespace Immigration_Dashboard_Server.Controllers
         public Task<ActionResult<List<string>>> GetEligiblePaths(Guid userId)
         {
             return _service.GetEligiblePaths(userId);
+        }
 
+        [HttpGet]
+        [Route("/ImmigrationDashboard/DocumentType")]
+        [ActionName("GetDocumentType")]
+        [Consumes("application/json")]
+        [Produces("application/json", "application/xml")]
+        public Task<ActionResult<DocumentType>> GetDocumentType(Guid documentTypeId)
+        {
+            return _service.GetDocumentType(documentTypeId);
         }
     }
 }
