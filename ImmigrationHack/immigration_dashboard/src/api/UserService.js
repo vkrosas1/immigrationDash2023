@@ -71,16 +71,6 @@ const createDocument = async function (formId, status) {
     return await Service.post(`CreateUserDocument`, body, false);
 }
 
-/*const uploadDocument = async function (expirationDate, issueDate, issueCountry, docTypeId, user) {
-    User['ExpirationDate'] = expirationDate;
-    User['IssueDate'] = issueDate;
-    User['IssueCountry'] = issueCountry;
-    User['DocumentTypeId'] = docTypeId;
-    User['UserId'] = user.Id;
-
-    return await Service.postFormData(`UploadDocument`, User, {});
-}*/
-
 const UserService = {
     createUser,
     authenticateUser,

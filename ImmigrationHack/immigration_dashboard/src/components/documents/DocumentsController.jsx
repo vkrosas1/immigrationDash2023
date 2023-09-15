@@ -58,11 +58,8 @@ function DocumentView(props) {
     // set the value to the props
     // props.setIssueDate(issueDate);
 
-
-    var docmentTypeChosen = '';
     const getDocumentType = (value) => {
-        docmentTypeChosen = value;
-        setDocType(docmentTypeChosen); // save documentTypeChosen to the state of docType 
+        setDocType(value); // save documentTypeChosen to the state of docType 
     }
 
     // Generate JSX code for error message
