@@ -10,7 +10,6 @@ namespace ImmigrationHack.Services.src.Data.Entities
         [Key]
         public Guid Id { get; set; }
 
-        // Key
         public DateTime ExpirationDate { get; set; }
         public DateTime IssueDate { get; set; }
         public string IssueCountry { get; set; }

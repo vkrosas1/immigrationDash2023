@@ -1,8 +1,7 @@
-﻿using ImmigrationHack.Services.src.Data.Entities;
+﻿using ImmigrationHack.Services.src.Data.DataTransferObjects;
+using ImmigrationHack.Services.src.Data.Entities;
 using ImmigrationHack.Services.src.Repository;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ImmigrationHack.Services.src
 {
@@ -54,15 +53,20 @@ namespace ImmigrationHack.Services.src
 
         public async Task<ActionResult<User>> UpdateUser(Guid id, User updatedUser)
         {
-            var existing = await GetUser(id);
-
+            var existing = await repository.GetAsync<User>(id).AsTask();
+            if (existing == null)
+            {
+                return new ObjectResult(new { error = "Unable to find user" })
+                {
+                    StatusCode = 404,
+                };
+            }
             updatedUser.Id = id;
-            repository.GetEntry(existing);
+            repository.GetEntry<User>(existing).CurrentValues.SetValues(updatedUser);
 
-            repository.Update(updatedUser);
             if (await repository.SaveChangesAsync())
             {
-                return new ObjectResult(true)
+                return new ObjectResult(updatedUser)
                 {
                     StatusCode = 200
                 };
@@ -70,13 +74,12 @@ namespace ImmigrationHack.Services.src
             return new ObjectResult(new { error = "Unable to update user" })
             {
                 StatusCode = 500,
-
             };
         }
 
         public async Task<ActionResult<bool>> DeleteUser(Guid id)
         {
-            var toDelete = await GetUser(id);
+            var toDelete = await repository.GetAsync<User>(id).AsTask();
             repository.Delete(toDelete);
             if (await repository.SaveChangesAsync())
             {
@@ -88,7 +91,6 @@ namespace ImmigrationHack.Services.src
             return new ObjectResult(new { error = "Unable to Delete user" })
             {
                 StatusCode = 500,
-
             };
         }
 
@@ -118,9 +120,7 @@ namespace ImmigrationHack.Services.src
             return new ObjectResult(new { error = "Unable to Upload Document" })
             {
                 StatusCode = 500,
-
             };
-
         }
 
         public async Task<ActionResult<bool>> AuthenticateUser(string emailId, string password)
@@ -138,14 +138,24 @@ namespace ImmigrationHack.Services.src
                 new ObjectResult(new { error = "Wrong password" }) { StatusCode = 401};
         }
 
-        public async Task<ActionResult<List<UserDocument>>> GetAllDocuments(Guid userid)
+        public async Task<ActionResult<List<UserDocumentResponse>>> GetAllDocuments(Guid userid)
         {
             var userDocuments = repository.GetUserDocumentsByuserId(userid);
-             if(userDocuments == null || userDocuments.Count == 0)
-             {
-                 return new ObjectResult(new { error = "User doesnt exist" }) { StatusCode = 400 };
-             }
-             return new ObjectResult(userDocuments) { StatusCode = 200 };
+            if(userDocuments == null || userDocuments.Count == 0)
+            {
+                return new ObjectResult(new { error = "User doesnt exist" }) { StatusCode = 400 };
+            }
+            List < UserDocumentResponse > response = new List < UserDocumentResponse >();
+
+            foreach (var userDocument in userDocuments)
+            {
+                UserDocumentResponse userDocumentResponse = new UserDocumentResponse();
+                userDocumentResponse.UserDocument = userDocument;
+                var documentType = repository.GetAsync<DocumentType>(userDocument.DocumentTypeId).Result;
+                userDocumentResponse.DocumentTypeName = documentType?.Name;
+                response.Add(userDocumentResponse);
+            }
+             return new ObjectResult(response) { StatusCode = 200 };
         }
 
         public async Task<ActionResult<DocumentType>> AddDocumentType(DocumentType docType)
@@ -166,7 +176,6 @@ namespace ImmigrationHack.Services.src
             return new ObjectResult(new { error = "Unable to create documentType" })
             {
                 StatusCode = 500,
-
             };
         }
 
@@ -188,7 +197,6 @@ namespace ImmigrationHack.Services.src
             return new ObjectResult(new { error = "Unable to create path" })
             {
                 StatusCode = 500,
-
             };
         }
 
@@ -210,7 +218,6 @@ namespace ImmigrationHack.Services.src
             return new ObjectResult(new { error = "Unable to create form" })
             {
                 StatusCode = 500,
-
             };
         }
 
@@ -224,7 +231,7 @@ namespace ImmigrationHack.Services.src
                     StatusCode = 200
                 };
             }
-            return new ObjectResult(new { error = "User Not Found" }) { StatusCode = 404 };
+            return new ObjectResult(new { error = "DocumentType Not Found" }) { StatusCode = 404 };
         }
 
         public async Task<ActionResult<List<string>>> GetEligiblePaths(Guid userId)
@@ -238,6 +245,71 @@ namespace ImmigrationHack.Services.src
                 };
             }
             return new ObjectResult(new { error = "Eligible Paths Not Found for the User" }) { StatusCode = 404 };
+        }
+
+        public async Task<ActionResult<DocumentType>> GetDocumentType(Guid documentTypeId)
+        {
+            var docType = await repository.GetAsync<DocumentType>(documentTypeId);
+            if (docType != null)
+            {
+                return new ObjectResult(docType)
+                {
+                    StatusCode = 200
+                };
+            }
+            return new ObjectResult(new { error = "DocumentType Not Found" }) { StatusCode = 404 };
+        }
+
+        public async Task<ActionResult<UserDocument>> UpdateUserDocument(Guid userDocumentId, UserDocument userDocument)
+        {
+            var existing = await repository.GetAsync<UserDocument>(userDocumentId);
+            if(existing == null)
+            {
+                return new ObjectResult(new { error = "Unable to find user document" })
+                {
+                    StatusCode = 404,
+                };
+            }
+            userDocument.Id = userDocumentId;
+            repository.GetEntry<UserDocument>(existing).CurrentValues.SetValues(userDocument);
+
+            repository.Update<UserDocument>(userDocument);
+            if (await repository.SaveChangesAsync())
+            {
+                return new ObjectResult(userDocument)
+                {
+                    StatusCode = 200
+                };
+            }
+            return new ObjectResult(new { error = "Unable to update user" })
+            {
+                StatusCode = 500,
+            };
+        }
+
+
+        public async Task<ActionResult<bool>> DeleteUserDocument(Guid id)
+        {
+            var toDelete = await repository.GetAsync<UserDocument>(id);
+            if (toDelete == null)
+            {
+                return new ObjectResult(new { error = "Unable to find userdocument" })
+                {
+                    StatusCode = 404,
+                };
+            }
+            repository.Delete<UserDocument>(toDelete);
+            if (await repository.SaveChangesAsync())
+            {
+                return new ObjectResult(true)
+                {
+                    StatusCode = 200
+                };
+            }
+            return new ObjectResult(new { error = "Unable to Delete userdocument" })
+            {
+                StatusCode = 500,
+            };
         }
     }
 }
