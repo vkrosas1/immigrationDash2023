@@ -5,10 +5,12 @@ import PathService from "../../api/PathService";
 import UserService from "../../api/UserService";
 import React, { useState } from "react";
 import Tree from 'react-d3-tree';
+import { useWindowDimensions } from "../../Contstants";
 function HomeController(props) {
     // React States
     const [validPaths, setValidPaths] = useState([]);
     const [allDocs, setAllDocs] = useState([]);
+    const { height, width } = useWindowDimensions();
 
     useEffect(() => {
         const getPaths = async () => {
@@ -60,11 +62,14 @@ function HomeController(props) {
 
         if (validPaths.length !== 0) {
             return (
-                <div id="treeWrapper" style={{ width: '100em', height: '100em', position: 'fixed' }}>
+                <div id="treeWrapper" style={{ height: '100em' }}>
                     <Tree
                         data={formatInput(validPaths)}
                         pathFunc={straightPathFunc}
                         draggable={false}
+                        zoomable={false}
+                        orientation={"vertical"}
+                        translate={{ x: width/2, y: 50 } }
                     />
                 </div>
             );

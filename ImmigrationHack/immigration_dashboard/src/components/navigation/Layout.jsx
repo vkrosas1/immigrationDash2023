@@ -17,7 +17,6 @@ function Layout(props) {
     return (
         <Router>
             <div className="App">
-                <div className="container">
                     <Header userResult={(userResult || token)} class="block" {...props} />
                     <Routes class="block">
                         {(userResult || token) ? ( // Check if user is authenticated
@@ -36,7 +35,6 @@ function Layout(props) {
                         {/* Redirect to a default route if none of the conditions match */}
                         <Route path="/" element={<Navigate to="/login" />} />
                     </Routes>
-                </div>
             </div>
         </Router>
     );

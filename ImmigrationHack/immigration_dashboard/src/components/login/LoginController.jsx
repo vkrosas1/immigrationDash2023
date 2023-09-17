@@ -84,7 +84,7 @@ function LoginController(props) {
     );
 
     return (
-        <div className="app">
+        <div className="login">
             <div className="login-form">
                 {//should go to home page after user is logged in
                     isSubmitted ? navigate('/home') : renderForm}

@@ -8,8 +8,8 @@ function Header(userResult) {
         textAlign: 'center',
         background: '#333',
         color: "#fff",
-        position: 'absolute',
-        width: "100%"
+        width: "100%",
+        top: 0
     }
 
     const linkStyle = {
