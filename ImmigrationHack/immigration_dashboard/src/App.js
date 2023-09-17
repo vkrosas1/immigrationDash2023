@@ -18,7 +18,7 @@ function App() {
 
     // Get forms and paths
     const getData = async () => {
-        setState({
+      /*  setState({
             ...state,
             isLoading: true
         })
@@ -31,7 +31,7 @@ function App() {
                 isLoading: false
             })
             return
-        }
+        }*/
 
         // const paths = await PathService.getPaths(tempUser.paths, forms)
     /*    const paths = await PathService.getPathsTemp(tempUser.paths, forms)

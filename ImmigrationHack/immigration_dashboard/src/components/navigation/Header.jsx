@@ -7,7 +7,9 @@ function Header(userResult) {
     const headerStyle = {
         textAlign: 'center',
         background: '#333',
-        color: "#fff"
+        color: "#fff",
+        position: 'absolute',
+        width: "100%"
     }
 
     const linkStyle = {
