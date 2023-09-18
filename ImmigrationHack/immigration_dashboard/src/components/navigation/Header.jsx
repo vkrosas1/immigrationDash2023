@@ -44,7 +44,7 @@ function Header(userResult) {
                         Settings
                     </Link>{' '}
                     |{' '}
-                    <Link style={linkStyle} onClick={handleLogout} to="/login">
+                    <Link style={linkStyle} onClick={handleLogout} to="/home">
                         Logout
                     </Link>
                 </>

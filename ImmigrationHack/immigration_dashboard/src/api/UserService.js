@@ -43,10 +43,20 @@ const getUserInfo = async function (email) {
     });
 }
 
+const updateUserInfo = async function (email, name, password, country, userId) {
+    User['Email'] = email;
+    User['Name'] = name;
+    User['Password'] = password;
+    User['Country'] = country;
+    User["Id"] = userId;
+    return await Service.put(BASE_URL + `/User/` + userId, User);
+}
+
 const UserService = {
     authenticateUser,
     createUser,
-    getUserInfo
+    getUserInfo,
+    updateUserInfo
 }
 
 const User = {}

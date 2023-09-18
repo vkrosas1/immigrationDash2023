@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import FileService from "../../api/FileService";
 import { STATUSES, TEMP_USER, getCountry } from "../../Contstants";
 import DocDropdown from "./DocDropdown";
+import PathService from "../../api/PathService";
 import UserService from "../../api/UserService";
 import { useNavigate } from 'react-router-dom';
 
@@ -13,6 +14,7 @@ function DocumentView(props) {
     const [issueDate, setIssueDate] = useState('');
     const [issueCoun, setIssueCoun] = useState("");
     const [docType, setDocType] = useState("");
+    const [allDocs, setAllDocs] = useState([]);
     const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
@@ -41,6 +43,16 @@ function DocumentView(props) {
             }
         }
     };
+
+    useEffect(() => {
+        const getAllDocs = async () => {
+            const getUserInfo = await UserService.getUserInfo(localStorage.getItem('email'));
+            const paths = await PathService.getAllUserDocs(getUserInfo.data.id);
+            setAllDocs(paths.data);
+
+            return "You haven't added any documents yet";
+        }; getAllDocs();
+    }, []);
 
     const documentOptions = [
         { value: "birth certificate", label: "Birth Certificate" },
@@ -74,23 +86,22 @@ function DocumentView(props) {
         country: "Please select country",
         submit: "Failed to submit document"
     };
-
+  
     // write a form that will take in the document type, issue date, expiration date, country issued, and comments and save it to the database
-
     const renderForm = (
         <div className="App">
-            <form onSubmit={handleSubmit}>
+            <form className={allDocs ? "documentsUpload" : "documentsUpload firstTime"} onSubmit={handleSubmit}>
                 <ul><li>
-                <div>
-                    <DocDropdown
-                        isSearchable
-                        isMulti
-                        placeHolder="Select document type"
-                        options={documentOptions}
-                        value={docType}
-                        onChange={(value) => console.log("here is onChange in DocController: " + value)}
-                        sendToParent={getDocumentType}
-                        required
+                    <div>
+                        <DocDropdown
+                            isSearchable
+                            isMulti
+                            placeHolder="Select document type"
+                            options={documentOptions}
+                            value={docType}
+                            onChange={(value) => console.log("here is onChange in DocController: " + value)}
+                            sendToParent={getDocumentType}
+                            required
                         />
                         {renderErrorMessage("dropdown")}
                     </div>
@@ -103,23 +114,21 @@ function DocumentView(props) {
                         <label for="expirationDate">Expiration date:</label>
                         <input id="dateRequired" type="date" name="dateRequired" defaultValue={date} value={expirDate} onChange={(e) => setExpirDate(e.target.value)} required />
                     </li>
-                     <li>
-                        <label for="issueCountry">Country issued:</label>
+                    <li>
+                        <div className="divLabel">Country issued:</div>
                         <div className="countryOrigin" value={issueCoun} onChange={(e) => setIssueCoun(e.target.value)} required={true}>{getCountry()}
                             {renderErrorMessage("country")}
                         </div>
                     </li>
-                    <li>
-                        <label for="msg">Comments</label>
-                        <textarea id="msg" name="user_message"></textarea>
-                    </li>
                     <div>
-                    <button>Submit</button>
+                        <button>Submit</button>
                         {renderErrorMessage("submit")}
                     </div>
                 </ul>
             </form>
-
+            <div className="submittedDocsSection">Submitted Documents
+                <div className="submittedDocs">{allDocs && allDocs.map((doc) => <li>{doc.documentTypeName}, Expiration Date: { doc.userDocument.expirationDate.substring(0, 10)}</li>)} </div>
+            </div>
         </div>
     );
 

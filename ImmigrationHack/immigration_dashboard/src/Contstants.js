@@ -60,7 +60,7 @@ export const useWindowDimensions = ()=> {
 export const getCountry = () => {
     return (
         <select class="form-select" id="country" name="country">
-            <option value="">country</option>
+            <option value="">Country</option>
             <option value="Afghanistan">Afghanistan</option>
             <option value="Aland Islands">Aland Islands</option>
             <option value="Albania">Albania</option>

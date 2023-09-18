@@ -1,6 +1,7 @@
 .App {
   text-align: center;
   display: grid;
+  margin-top: 2em; 
 }
 
 header { 
