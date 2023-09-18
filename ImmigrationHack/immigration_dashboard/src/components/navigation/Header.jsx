@@ -7,7 +7,9 @@ function Header(userResult) {
     const headerStyle = {
         textAlign: 'center',
         background: '#333',
-        color: "#fff"
+        color: "#fff",
+        width: "100%",
+        top: 0
     }
 
     const linkStyle = {
@@ -42,7 +44,7 @@ function Header(userResult) {
                         Settings
                     </Link>{' '}
                     |{' '}
-                    <Link style={linkStyle} onClick={handleLogout} to="/login">
+                    <Link style={linkStyle} onClick={handleLogout} to="/home">
                         Logout
                     </Link>
                 </>

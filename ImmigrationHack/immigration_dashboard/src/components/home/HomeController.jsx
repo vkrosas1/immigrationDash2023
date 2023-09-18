@@ -4,61 +4,84 @@ import { useEffect } from "react";
 import PathService from "../../api/PathService";
 import UserService from "../../api/UserService";
 import React, { useState } from "react";
-
+import Tree from 'react-d3-tree';
+import { useWindowDimensions } from "../../Contstants";
 function HomeController(props) {
     // React States
     const [validPaths, setValidPaths] = useState([]);
     const [allDocs, setAllDocs] = useState([]);
+    const { height, width } = useWindowDimensions();
 
     useEffect(() => {
         const getPaths = async () => {
             const getUserInfo = await UserService.getUserInfo(localStorage.getItem('email'));
-            console.log(getUserInfo);
             const paths = await PathService.getEligiblePaths(getUserInfo.data.id);
-            console.log("got here");
-            setValidPaths(paths.data[0]);
-            if (paths.data[0]) {
-                return "yay got paths";
-
-            }
+            setValidPaths(paths.data);
+            console.log(paths.data);
             return "You haven't added any documents yet";
         }; getPaths();
     }, []);
 
-    /*useEffect(() => {
+    useEffect(() => {
         const getAllDocs = async () => {
             const getUserInfo = await UserService.getUserInfo(localStorage.getItem('email'));
-            console.log(getUserInfo);
             const paths = await PathService.getAllUserDocs(getUserInfo.data.id);
-            console.log("got here");
-            setAllDocs(paths.data[0]);
-            if (paths.data[0]) {
-                return "yay got paths";
+            setAllDocs(JSON.stringify(paths.data[0]));
 
-            }
             return "You haven't added any documents yet";
         }; getAllDocs();
     }, []);
-*/
 
-
-   
-   /* const getDisplay = () => {
-        if (!selectedValue || selectedValue.length === 0 || props.hasBeenSubmitted) {
-            return props.placeHolder;
+    function formatInput(paths) {
+        let result = [];
+        let level = { result };
+        if (paths.length !== 0) {
+            paths.forEach(path => {
+                path.split(',').reduce((r, name, i, a) => {
+                    console.log("this is r: ", r);
+                    if (!r[name]) {
+                        r[name] = { result: [] };
+                        r.result.push({ name, children: r[name].result })
+                    }
+                    return r[name];
+                }, level)
+            })
+            return result;
         }
-        return selectedValue.label;
-    };*/
 
-   /* <div className="dropdown-selected-value">{getDisplay()}</div>*/
-   
+
+    }
+
+    const OrgChartTree = () => {
+        const straightPathFunc = (linkDatum, orientation) => {
+            const { source, target } = linkDatum;
+            return orientation === 'horizontal'
+                ? `M${source.y},${source.x}L${target.y},${target.x}`
+                : `M${source.x},${source.y}L${target.x},${target.y}`;
+        };
+
+        if (validPaths.length !== 0) {
+            return (
+                <div id="treeWrapper" style={{ height: '100em' }}>
+                    <Tree
+                        data={formatInput(validPaths)}
+                        pathFunc={straightPathFunc}
+                        draggable={false}
+                        zoomable={false}
+                        orientation={"vertical"}
+                        translate={{ x: width/2, y: 50 } }
+                    />
+                </div>
+            );
+        } else {
+            return (<div>  </div>);
+        }
+    }
+
+
     return (
-        <div className="app">
-            <div className="login-form">
-                <div className="title">{validPaths}</div>
-                {/*<div className="title">{allDocs}</div>*/}
-                
-            </div>
+        <div className="home-pathDiagram">
+            <OrgChartTree />
         </div>
     );
 }

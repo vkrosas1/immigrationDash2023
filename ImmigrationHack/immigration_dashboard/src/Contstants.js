@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 export const BASE_URL = 'https://localhost:7190/ImmigrationDashboard';
 export const USER_ID = '1';
 export const STATUSES = {
@@ -33,10 +34,33 @@ export const TEMP_USER = {
     ]
 }
 
+function getWindowDimensions() {
+    const { innerWidth: width, innerHeight: height } = window;
+    return {
+        width,
+        height
+    };
+}
+
+export const useWindowDimensions = ()=> {
+    const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
+
+    useEffect(() => {
+        function handleResize() {
+            setWindowDimensions(getWindowDimensions());
+        }
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    return windowDimensions;
+}
+
 export const getCountry = () => {
     return (
         <select class="form-select" id="country" name="country">
-            <option value="">country</option>
+            <option value="">Country</option>
             <option value="Afghanistan">Afghanistan</option>
             <option value="Aland Islands">Aland Islands</option>
             <option value="Albania">Albania</option>
